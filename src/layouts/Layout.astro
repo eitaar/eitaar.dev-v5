@@ -1,0 +1,36 @@
+---
+import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+
+interface Props {
+	title: string;
+	description: string;
+	showHeader?: boolean;
+	showFooter?: boolean;
+}
+const { title, description, showHeader = true, showFooter = true } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<script is:inline>
+			function initTheme() {
+				const savedTheme = localStorage.getItem("theme");
+				const theme = "light"; //savedTheme || window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+				document.documentElement.setAttribute("data-theme", theme);
+			}
+			initTheme();
+		</script>
+	</head>
+	<body class="bg-bg">
+		{showHeader && <Header />}
+		<main>
+			<slot />
+		</main>
+		{showFooter && <Footer />}
+	</body>
+</html>

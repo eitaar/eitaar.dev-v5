@@ -1,0 +1,135 @@
+@import "tailwindcss";
+@import "./light.css";
+@import "./dark.css";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ─── Color & Font Tokens ─── */
+@theme inline {
+	--color-bg: var(--bg);
+	--color-bg2: var(--bg2);
+	--color-text: var(--text);
+	--color-muted: var(--muted);
+	--color-border: var(--border);
+	--color-purple: var(--purple);
+	--color-pink: var(--pink);
+	--color-yellow: var(--yellow);
+	--color-cyan: var(--cyan);
+	--color-magenta: var(--magenta);
+	--color-purple-pale: var(--purple-pale);
+	--color-pink-pale: var(--pink-pale);
+	--color-yellow-pale: var(--yellow-pale);
+	--color-cyan-pale: var(--cyan-pale);
+	--color-magenta-pale: var(--magenta-pale);
+	--color-card: var(--card);
+
+	/* Accent aliases — c1〜c5 */
+	--color-c1: var(--c1);
+	--color-c2: var(--c2);
+	--color-c3: var(--c3);
+	--color-c4: var(--c4);
+	--color-c5: var(--c5);
+	--color-c1-pale: var(--c1-pale);
+	--color-c2-pale: var(--c2-pale);
+	--color-c3-pale: var(--c3-pale);
+	--color-c4-pale: var(--c4-pale);
+	--color-c5-pale: var(--c5-pale);
+
+	/* Fonts */
+	--font-heading: var(--font-fredoka), sans-serif;
+	--font-body: var(--font-dm-sans), sans-serif;
+
+	/* Animations */
+	--animate-float-a: float-a 5s ease-in-out infinite;
+	--animate-float-b: float-b 4s ease-in-out infinite;
+	--animate-badge-float: badge-float 3s ease-in-out infinite;
+	--animate-spin-slow: spin-slow 10s linear infinite;
+}
+
+/* ─── CSS Variable Aliases & Shadow Tokens ─── */
+:root {
+	--c1: var(--purple);
+	--c1-pale: var(--purple-pale);
+	--c2: var(--pink);
+	--c2-pale: var(--pink-pale);
+	--c3: var(--yellow);
+	--c3-pale: var(--yellow-pale);
+	--c4: var(--cyan);
+	--c4-pale: var(--cyan-pale);
+	--c5: var(--magenta);
+	--c5-pale: var(--magenta-pale);
+	--shadow: 4px 5px 0px var(--border);
+	--shadow-h: 6px 7px 0px var(--border);
+}
+
+/* ─── Base ─── */
+@layer base {
+	body {
+		font-family: var(--font-body);
+		color: var(--text);
+		background: var(--bg);
+	}
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-heading);
+	}
+	section[id] {
+		scroll-margin-top: 80px;
+	}
+}
+
+/* ─── Scroll reveal base state (animated by JS) ─── */
+.rv {
+	opacity: 0;
+}
+
+/* ─── Keyframes ─── */
+@keyframes bl-in {
+	from {
+		opacity: 0;
+		transform: translateY(50px) scale(0.7);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@keyframes float-a {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-14px);
+	}
+}
+
+@keyframes float-b {
+	0%,
+	100% {
+		transform: translateY(0) rotate(0deg);
+	}
+	50% {
+		transform: translateY(-10px) rotate(5deg);
+	}
+}
+
+@keyframes badge-float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-5px);
+	}
+}
+
+@keyframes spin-slow {
+	to {
+		transform: rotate(360deg);
+	}
+}
