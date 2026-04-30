@@ -1,0 +1,41 @@
+---
+interface Props {
+	links: { text: string; url: string }[];
+	hasThemeSwitcher?: boolean;
+}
+const { links, hasThemeSwitcher } = Astro.props;
+---
+
+<div
+	class="flex items-center gap-1 rounded-full border-2 border-border bg-card px-2 py-1.5 shadow-pill "
+>
+	{
+		links.map(({ text, url }) => (
+			<a
+				href={url}
+				class="rounded-full px-3.5 py-1 font-heading text-[13px] font-medium text-muted no-underline transition-colors hover:bg-yellow hover:text-text"
+			>
+				{text}
+			</a>
+		))
+	}
+
+	{
+		hasThemeSwitcher && (
+			<button
+				id="theme-toggle"
+				aria-label="Toggle dark mode"
+				class="ml-1 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-border bg-yellow text-text transition-transform duration-300 hover:scale-110 hover:rotate-[20deg]"
+			>
+			</button>
+		)
+	}
+</div>
+
+<script>
+	function toggleTheme() {
+		let nextTheme = localStorage.getItem("theme") === "dark" ? "light" : "dark";
+		document.documentElement.setAttribute("data-theme", nextTheme);
+		localStorage.setItem("theme", nextTheme);
+	}
+</script>

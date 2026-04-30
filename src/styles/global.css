@@ -22,18 +22,6 @@
 	--color-magenta-pale: var(--magenta-pale);
 	--color-card: var(--card);
 
-	/* Accent aliases — c1〜c5 */
-	--color-c1: var(--c1);
-	--color-c2: var(--c2);
-	--color-c3: var(--c3);
-	--color-c4: var(--c4);
-	--color-c5: var(--c5);
-	--color-c1-pale: var(--c1-pale);
-	--color-c2-pale: var(--c2-pale);
-	--color-c3-pale: var(--c3-pale);
-	--color-c4-pale: var(--c4-pale);
-	--color-c5-pale: var(--c5-pale);
-
 	/* Fonts */
 	--font-heading: var(--font-fredoka), sans-serif;
 	--font-body: var(--font-dm-sans), sans-serif;
@@ -43,21 +31,13 @@
 	--animate-float-b: float-b 4s ease-in-out infinite;
 	--animate-badge-float: badge-float 3s ease-in-out infinite;
 	--animate-spin-slow: spin-slow 10s linear infinite;
+
+	--shadow-pill: 3px 3px 0px var(--border);
 }
 
 /* ─── CSS Variable Aliases & Shadow Tokens ─── */
 :root {
-	--c1: var(--purple);
-	--c1-pale: var(--purple-pale);
-	--c2: var(--pink);
-	--c2-pale: var(--pink-pale);
-	--c3: var(--yellow);
-	--c3-pale: var(--yellow-pale);
-	--c4: var(--cyan);
-	--c4-pale: var(--cyan-pale);
-	--c5: var(--magenta);
 	--c5-pale: var(--magenta-pale);
-	--shadow: 4px 5px 0px var(--border);
 	--shadow-h: 6px 7px 0px var(--border);
 }
 
@@ -76,14 +56,6 @@
 	h6 {
 		font-family: var(--font-heading);
 	}
-	section[id] {
-		scroll-margin-top: 80px;
-	}
-}
-
-/* ─── Scroll reveal base state (animated by JS) ─── */
-.rv {
-	opacity: 0;
 }
 
 /* ─── Keyframes ─── */
