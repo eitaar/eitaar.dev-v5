@@ -14,7 +14,7 @@ const { title, description, showHeader = true, showFooter = true } = Astro.props
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 	<head>
 		<BaseHead title={title} description={description} />
 		<script is:inline>
@@ -28,7 +28,7 @@ const { title, description, showHeader = true, showFooter = true } = Astro.props
 	</head>
 	<body class="bg-bg font-body">
 		{showHeader && <Header />}
-		<main>
+		<main class:list={[{ "pt-20": showHeader }]}>
 			<slot />
 		</main>
 		{showFooter && <Footer />}

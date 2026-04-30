@@ -4,7 +4,7 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ─── Color & Font Tokens ─── */
-@theme inline {
+@theme {
 	--color-bg: var(--bg);
 	--color-bg2: var(--bg2);
 	--color-text: var(--text);
