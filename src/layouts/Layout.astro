@@ -28,7 +28,7 @@ const { title, description, showHeader = true, showFooter = true } = Astro.props
 	</head>
 	<body class="bg-bg font-body">
 		{showHeader && <Header />}
-		<main class:list={[{ "pt-20": showHeader }]}>
+		<main >
 			<slot />
 		</main>
 		{showFooter && <Footer />}

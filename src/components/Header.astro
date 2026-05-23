@@ -1,5 +1,4 @@
 ---
-import Pill from "./ui/Pill.astro";
 
 const NAV_LINKS = [
 	{ text: "About", url: "#about" },
@@ -10,12 +9,6 @@ const NAV_LINKS = [
 ---
 
 <header
-	id="site-header"
 	class="fixed top-0 right-0 left-0 z-50 flex h-20 items-center justify-between px-8 py-4 transition-[background-color,border-color] duration-300"
 >
-	<a href="/" class="font-heading text-2xl leading-none font-bold text-text no-underline">
-		te<span class="text-purple">x</span>t
-	</a>
-
-	<Pill links={NAV_LINKS} hasThemeSwitcher />
 </header>

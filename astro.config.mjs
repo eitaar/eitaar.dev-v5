@@ -15,19 +15,26 @@ export default defineConfig({
 	fonts: [
 		{
 			provider: fontProviders.google(),
-			name: "Fredoka",
-			cssVariable: "--font-fredoka",
+			name: "Share",
+			cssVariable: "--font-share",
 			fallbacks: ["sans-serif"],
-			weights: [400, 500, 600, 700],
+			weights: [400, 700],
 			styles: ["normal"],
 		},
 		{
-			provider: fontProviders.google(),
-			name: "DM Sans",
-			cssVariable: "--font-dm-sans",
-			fallbacks: ["sans-serif"],
-			weights: [300, 400, 500],
-			styles: ["normal", "italic"],
+			provider: fontProviders.local(),
+			name: "Ndot47",
+			cssVariable: "--font-ndot47",
+			options: {
+				variants: [
+					{
+						/* Font: Ndot47 Inspired by Nothing | Copyright (c) 2021-2026, “Interactivate” | Licensed under the SIL Open Font License, Version 1.1 (http://scripts.sil.org/OFL) */
+						src: ["./src/assets/fonts/ndot-47-inspired-by-nothing.otf.woff2"],
+						weight: "normal",
+						style: "normal",
+					},
+				],
+			},
 		},
 	],
 });
