@@ -3,6 +3,7 @@ const NAV_LINKS = [
 	{ text: "Projects", url: "/projects" },
 	{ text: "Contact", url: "#contact" },
 ];
+import { Icon } from "astro-icon/components";
 ---
 
 <header class="fixed top-0 right-0 left-0 z-50 flex h-20 items-center justify-between px-8 py-4">
@@ -18,6 +19,9 @@ const NAV_LINKS = [
 					</li>
 				))
 			}
+		<button id="theme-toggle" class="">
+			<Icon name="bi:moon-stars-fill" class="h-5 w-5" />
+		</button>
 		</ul>
 	</nav>
 </header>

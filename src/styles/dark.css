@@ -1,19 +1,7 @@
 [data-theme="dark"] {
 	color-scheme: dark;
-	--bg: oklch(11% 0.06 285);
-	--bg2: oklch(14% 0.07 330);
-	--text: #f5f0ff;
-	--muted: #8a80a0;
-	--border: #f5f0ff;
-	--purple: oklch(75% 0.22 285);
-	--pink: oklch(72% 0.2 330);
-	--yellow: oklch(80% 0.18 60);
-	--cyan: oklch(74% 0.16 200);
-	--magenta: oklch(76% 0.19 310);
-	--purple-pale: oklch(18% 0.08 285);
-	--pink-pale: oklch(16% 0.08 330);
-	--yellow-pale: oklch(18% 0.08 60);
-	--cyan-pale: oklch(16% 0.07 200);
-	--magenta-pale: oklch(17% 0.08 310);
-	--card: oklch(16% 0.09 285);
+	--bg: #000000;
+	--content: #f1f1f4;
+	--muted: #d8d8d8;
+	--border: #626264;
 }

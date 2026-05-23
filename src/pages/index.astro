@@ -5,10 +5,10 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="eitaar.dev" description="Eitaar's personal website">
-	<div class="flex min-h-screen w-full items-center justify-center gap-32 p-16">
-		<div class="flex flex-col items-start justify-center gap-7 pt-10">
-			<h1 class="font-ndot47 text-8xl tracking-tight">eitaar</h1>
-			<h2 class="font-share text-2xl tracking-tight text-muted">Software Developer / Student</h2>
+	<div class="flex min-h-screen w-full items-center justify-between border-b border-border">
+		<div class="flex flex-col items-start justify-center gap-5 pt-10">
+			<h1 class="font-ndot47 text-9xl leading-none tracking-tight">eitaar</h1>
+			<p class="font-share text-xl tracking-wide text-muted">Software Developer / Student</p>
 		</div>
 		<Image
 			class="h-96 w-96"
@@ -18,5 +18,14 @@ import Layout from "../layouts/Layout.astro";
 			loading={"eager"}
 			format="avif"
 		/>
+	</div>
+	<div class="flex w-full flex-col items-start justify-start gap-16 py-36">
+		<h2 class="font-ndot47 text-6xl leading-none tracking-tight">About</h2>
+		<div class="flex text-xl">
+			<p>
+				lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut
+				labore et dolore magna aliqua
+			</p>
+		</div>
 	</div>
 </Layout>
