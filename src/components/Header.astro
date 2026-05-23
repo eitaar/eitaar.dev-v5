@@ -1,14 +1,23 @@
 ---
-
 const NAV_LINKS = [
-	{ text: "About", url: "#about" },
-	{ text: "Works", url: "#works" },
-	{ text: "Skills", url: "#skills" },
+	{ text: "Projects", url: "/projects" },
 	{ text: "Contact", url: "#contact" },
 ];
 ---
 
-<header
-	class="fixed top-0 right-0 left-0 z-50 flex h-20 items-center justify-between px-8 py-4 transition-[background-color,border-color] duration-300"
->
+<header class="fixed top-0 right-0 left-0 z-50 flex h-20 items-center justify-between px-8 py-4">
+	<h3 class="font-ndot47 text-lg">eitaar</h3>
+	<nav>
+		<ul class="flex gap-4 font-share text-lg text-muted">
+			{
+				NAV_LINKS.map((link) => (
+					<li>
+						<a href={link.url} class="">
+							{link.text}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
 </header>

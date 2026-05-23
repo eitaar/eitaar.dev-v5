@@ -3,4 +3,13 @@
 @import "./dark.css";
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+@theme inline {
+	--font-share: var(--font-share);
+	--font-ndot47: var(--font-ndot47);
+	--color-bg: var(--bg);
+	--color-content: var(--content);
+	--color-muted: var(--muted);
+	--color-border: var(--border);
+}
+
 /* ─── Color & Font Tokens ─── */

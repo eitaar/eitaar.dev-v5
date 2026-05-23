@@ -26,9 +26,9 @@ const { title, description, showHeader = true, showFooter = true } = Astro.props
 			initTheme();
 		</script>
 	</head>
-	<body class="bg-bg font-body">
+	<body class="bg-bg font-share text-content">
 		{showHeader && <Header />}
-		<main >
+		<main>
 			<slot />
 		</main>
 		{showFooter && <Footer />}
