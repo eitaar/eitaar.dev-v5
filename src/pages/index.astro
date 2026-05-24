@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import avatarImg from "../assets/img/avatar.png";
 import Layout from "../layouts/Layout.astro";
+import PixelIcon from "../assets/3a.svg";
 ---
 
 <Layout title="eitaar.dev" description="Eitaar's personal website">
@@ -21,11 +22,23 @@ import Layout from "../layouts/Layout.astro";
 	</div>
 	<div class="flex w-full flex-col items-start justify-start gap-16 py-36">
 		<h2 class="font-ndot47 text-6xl leading-none tracking-tight">About</h2>
-		<div class="flex text-xl">
-			<p>
-				lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut
-				labore et dolore magna aliqua
+		<div class="grid grid-cols-12 items-start gap-11">
+			<p class="text-xl text-pretty col-span-8">
+				I am a software developer, focused on the frontend. I'm currently learning Rust to try something other than web and build native applications, drawn by its performance and the chance to work with physical devices. Outside of work, I like to spend time reading books and comics or listening to music.
 			</p>
+			<PixelIcon
+				aria-label="pixel art icon"
+				class="col-span-3 mx-auto h-auto w-full max-w-[240px] [image-rendering:pixelated]"
+			/>
 		</div>
+	</div>
+	<div>
+		<!-- skill -->
+	</div>
+	<div>
+		<!-- works -->
+	</div>
+	<div>
+		<!-- contact -->
 	</div>
 </Layout>
