@@ -3,6 +3,13 @@ import { Image } from "astro:assets";
 import PixelIcon from "../assets/svg/bottle.svg";
 import avatarImg from "../assets/img/avatar.png";
 import Layout from "../layouts/Layout.astro";
+import Project from "../components/Project.astro";
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+const topProjects = projects
+	.filter((project) => project.data.topProject)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const skillGroups = [
 	{
@@ -54,9 +61,7 @@ const skillGroups = [
 			/>
 		</div>
 	</div>
-	<div
-		class="flex w-full flex-col items-start justify-start gap-16 border-b border-border py-36"
-	>
+	<div class="flex w-full flex-col items-start justify-start gap-16 border-b border-border py-36">
 		<h2 class="font-ndot47 text-6xl leading-none tracking-wide">Skills</h2>
 		<ul class="grid w-full grid-cols-4">
 			{
@@ -80,10 +85,13 @@ const skillGroups = [
 			}
 		</ul>
 	</div>
-	<div>
-		<!-- works -->
+	<div class="flex w-full flex-col items-start justify-start gap-16 border-b border-border py-36">
+		<h2 class="font-ndot47 text-6xl leading-none tracking-wide">Top Projects</h2>
+		<div class="flex w-full flex-col">
+			{topProjects.map((project) => <Project project={project} />)}
+		</div>
 	</div>
 	<div>
 		<!-- contact -->
-	</div>	
+	</div>
 </Layout>
