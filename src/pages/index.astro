@@ -16,13 +16,13 @@ const topProjects = projects
 ---
 
 <Layout title="eitaar" description="eitaar's portfolio">
-	<div class="flex min-h-screen w-full items-center justify-between border-border">
-		<div class="flex flex-col items-start justify-center gap-5 pt-12">
-			<h1 class="font-ndot47 text-9xl leading-none tracking-tight">eitaar</h1>
-			<p class="font-share text-xl tracking-wide text-muted">Software Developer / Student</p>
+	<div class="flex min-h-screen w-full flex-col-reverse items-center justify-center gap-8 border-border text-center lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:text-left">
+		<div class="flex flex-col items-center justify-center gap-5 pt-12 lg:items-start">
+			<h1 class="font-ndot47 text-7xl leading-none tracking-tight md:text-8xl lg:text-9xl">eitaar</h1>
+			<p class="font-share text-base tracking-wide text-muted md:text-lg lg:text-xl">Software Developer / Student</p>
 		</div>
 		<Image
-			class="h-96 w-96"
+			class="h-48 w-48 md:h-64 md:w-64 lg:h-96 lg:w-96"
 			src={avatarImg}
 			alt="avatar image"
 			fetchpriority={"high"}
