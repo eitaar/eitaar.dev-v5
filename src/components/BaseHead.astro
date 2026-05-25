@@ -1,6 +1,6 @@
 ---
 import { Font } from "astro:assets";
-
+import avatarIcon from "../assets/img/avatar.png";
 // import { ClientRouter } from "astro:transitions";
 
 interface Props {
@@ -47,8 +47,8 @@ const { title, description } = Astro.props;
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<!-- <meta
+<meta
   property="twitter:image"
   content={Astro.site ? new URL(avatarIcon.src, Astro.site) : avatarIcon.src}
-/> -->
+/> 
 <!-- <ClientRouter /> -->
