@@ -10,6 +10,20 @@
 	--color-content: var(--content);
 	--color-muted: var(--muted);
 	--color-border: var(--border);
+
+	--animate-motionspin: motionspin 7s cubic-bezier(0.12, 1, 0.2, 1);
+
+	@keyframes motionspin {
+		0% {
+			transform: rotate(0deg);
+		}
+		75% {
+			transform: rotate(1800deg);
+		}
+		100% {
+			transform: rotate(1800deg);
+		}
+	}
 }
 
 /* ─── Color & Font Tokens ─── */

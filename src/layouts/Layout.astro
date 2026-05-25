@@ -14,7 +14,7 @@ const { title, description, showHeader = true, showFooter = true } = Astro.props
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 	<head>
 		<BaseHead title={title} description={description} />
 		<script is:inline>
@@ -27,7 +27,7 @@ const { title, description, showHeader = true, showFooter = true } = Astro.props
 			})();
 		</script>
 	</head>
-	<body class="bg-bg font-share text-content transition-colors duration-100">
+	<body class="bg-bg font-share text-content transition-colors duration-300">
 		{showHeader && <Header />}
 		<main class="px-48">
 			<slot />

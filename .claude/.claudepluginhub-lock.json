@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "collections": {
+    "obra/superpowers": {
+      "identifier": "obra/superpowers",
+      "apiUrl": "",
+      "scope": "project",
+      "installedAt": "2026-05-25T08:04:39.748Z",
+      "updatedAt": "2026-05-25T08:04:39.748Z",
+      "components": {
+        "obra/superpowers:skills/brainstorming/SKILL.md": {
+          "source": "obra/superpowers",
+          "type": "skill",
+          "componentName": "brainstorming",
+          "sourcePath": "skills/brainstorming/SKILL.md",
+          "installedPath": "C:\\Users\\eitab\\Documents\\js\\eitaar.dev-v5\\.claude\\skills\\brainstorming",
+          "hash": "f260c775073816860fef8a37c032ac77e2ff5821",
+          "configFile": null,
+          "configKeys": null,
+          "configFragment": null
+        }
+      }
+    }
+  }
+}
