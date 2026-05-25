@@ -7,4 +7,5 @@ demoUrl: https://eitaar.dev
 techStack: ["Astro", "Tailwind"]
 topProject: true
 ---
+
 A portfolio website showcasing my skills, projects, and interests.

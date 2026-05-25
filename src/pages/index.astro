@@ -1,34 +1,18 @@
 ---
 import { Image } from "astro:assets";
-import PixelIcon from "../assets/svg/bottle.svg";
-import avatarImg from "../assets/img/avatar.png";
-import Layout from "../layouts/Layout.astro";
-import Project from "../components/Project.astro";
 import { getCollection } from "astro:content";
+import avatarImg from "../assets/img/avatar.png";
+import ArrowSvg from "../assets/svg/arrow.svg";
+import PixelIcon from "../assets/svg/bottle.svg";
+import Project from "../components/Project.astro";
+import { contacts } from "../data/contacts";
+import { skillGroups } from "../data/skills";
+import Layout from "../layouts/Layout.astro";
 
 const projects = await getCollection("projects");
 const topProjects = projects
 	.filter((project) => project.data.topProject)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-const skillGroups = [
-	{
-		category: "Language / Library / Framework",
-		items: ["javascript", "typescript", "vue", "nuxt", "astro", "tailwind", "python"],
-	},
-	{
-		category: "Creativity",
-		items: ["figma", "blockbench", "fusion360"],
-	},
-	{
-		category: "Tools",
-		items: ["git", "github", "vscode", "claude code", "codex"],
-	},
-	{
-		category: "Learning",
-		items: ["rust", "pytorch"],
-	},
-];
 ---
 
 <Layout title="eitaar.dev" description="Eitaar's personal website">
@@ -91,7 +75,39 @@ const skillGroups = [
 			{topProjects.map((project) => <Project project={project} />)}
 		</div>
 	</div>
-	<div>
-		<!-- contact -->
+	<div class="flex w-full flex-col items-start justify-start gap-16 border-b border-border py-36">
+		{
+			contacts
+				.filter((c) => c.big)
+				.map((contact) => (
+					<a
+						href={contact.link}
+						class="group flex w-full items-center justify-between border-b border-border pb-8"
+					>
+						<span class="font-ndot47 text-7xl leading-none tracking-wide">{contact.name}</span>
+						<ArrowSvg class="h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1" />
+					</a>
+				))
+		}
+		<ul class="grid w-full grid-cols-3">
+			{
+				contacts
+					.filter((c) => !c.big)
+					.map((contact, i) => (
+						<li
+							class:list={[
+								"flex flex-col gap-3 border-l border-border px-8 first:border-0 first:pl-0 last:pr-0",
+							]}
+						>
+							<span class="font-share text-sm tracking-wider text-muted uppercase">
+								{contact.label}
+							</span>
+							<a href={contact.link} class="font-ndot47 text-3xl leading-none tracking-wide">
+								{contact.name}
+							</a>
+						</li>
+					))
+			}
+		</ul>
 	</div>
 </Layout>

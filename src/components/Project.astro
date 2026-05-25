@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import ArrowSvg from "../assets/svg/arrow.svg";
+
 interface Props {
 	project: CollectionEntry<"projects">;
 }
@@ -11,14 +12,13 @@ const year = pubDate.getFullYear();
 const href = demoUrl ?? repoUrl ?? "#";
 ---
 
-<a
-	href={href}
-	class="group flex items-center gap-8 border-b border-border py-8"
->
+<a href={href} class="group flex items-center gap-8 border-b border-border py-8 last:border-0">
 	<span class="w-20 shrink-0 font-share text-sm tracking-wider text-muted">{year}</span>
 	<div class="min-w-0 flex-1">
 		<h3 class="mb-2 text-4xl leading-none font-bold tracking-tight">{title}</h3>
-		<ul class="flex flex-wrap items-center gap-x-2 font-share text-xs tracking-widest text-muted uppercase">
+		<ul
+			class="flex flex-wrap items-center gap-x-2 font-share text-xs tracking-widest text-muted uppercase"
+		>
 			{
 				techStack.map((item, i) => (
 					<>
@@ -30,5 +30,5 @@ const href = demoUrl ?? repoUrl ?? "#";
 		</ul>
 	</div>
 	<p class="w-80 shrink-0 text-base leading-relaxed text-muted">{summary}</p>
-	<ArrowSvg class="w-12 shrink-0 transition-transform group-hover:translate-x-1 h-8 fill-current" />
+	<ArrowSvg class="h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1" />
 </a>
