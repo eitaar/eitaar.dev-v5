@@ -17,6 +17,7 @@
 ## Conventions
 
 Because no test suite exists, each task follows this rhythm:
+
 1. Read the current file region.
 2. Apply the exact diff shown.
 3. Run `npx astro check` — must report **0 errors**.
@@ -28,19 +29,20 @@ A full visual audit happens at the end (Task 8).
 
 ## File Map
 
-| File | Responsibility | Tasks |
-|---|---|---|
-| `src/layouts/Layout.astro` | `<main>` horizontal padding | Task 1 |
-| `src/components/Footer.astro` | Footer padding + flex direction | Task 1 |
-| `src/pages/index.astro` | All 4 section-level layout changes | Tasks 2–6 |
-| `src/components/Project.astro` | Project row card layout | Task 5 |
-| `src/components/Header.astro` | Nav gap safety tweak | Task 7 |
+| File                           | Responsibility                     | Tasks     |
+| ------------------------------ | ---------------------------------- | --------- |
+| `src/layouts/Layout.astro`     | `<main>` horizontal padding        | Task 1    |
+| `src/components/Footer.astro`  | Footer padding + flex direction    | Task 1    |
+| `src/pages/index.astro`        | All 4 section-level layout changes | Tasks 2–6 |
+| `src/components/Project.astro` | Project row card layout            | Task 5    |
+| `src/components/Header.astro`  | Nav gap safety tweak               | Task 7    |
 
 ---
 
 ### Task 1: Layout shell + Footer
 
 **Files:**
+
 - Modify: `src/layouts/Layout.astro:32`
 - Modify: `src/components/Footer.astro:1-2`
 
@@ -49,13 +51,13 @@ A full visual audit happens at the end (Task 8).
 Open [src/layouts/Layout.astro](../../../src/layouts/Layout.astro) line 32. Replace:
 
 ```astro
-<main class="px-48">
+<main class="px-48"></main>
 ```
 
 with:
 
 ```astro
-<main class="px-6 md:px-12 lg:px-48">
+<main class="px-6 md:px-12 lg:px-48"></main>
 ```
 
 - [ ] **Step 2: Update Footer padding and flex direction**
@@ -64,14 +66,16 @@ Open [src/components/Footer.astro](../../../src/components/Footer.astro). Replac
 
 ```astro
 <footer class="px-48 pt-16 pb-6">
-	<div class="flex items-center justify-between">
+	<div class="flex items-center justify-between"></div>
+</footer>
 ```
 
 with:
 
 ```astro
 <footer class="px-6 pt-16 pb-6 md:px-12 lg:px-48">
-	<div class="flex flex-col items-start gap-2 md:flex-row md:items-center md:justify-between">
+	<div class="flex flex-col items-start gap-2 md:flex-row md:items-center md:justify-between"></div>
+</footer>
 ```
 
 - [ ] **Step 3: Type check**
@@ -91,6 +95,7 @@ git commit -m "feat(responsive): mobile-first padding for main and footer"
 ### Task 2: Hero section
 
 **Files:**
+
 - Modify: `src/pages/index.astro:19-33`
 
 - [ ] **Step 1: Replace the hero block**
@@ -118,10 +123,14 @@ Open [src/pages/index.astro](../../../src/pages/index.astro). Replace lines 19-3
 with:
 
 ```astro
-<div class="flex min-h-screen w-full flex-col-reverse items-center justify-center gap-8 border-border text-center lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:text-left">
+<div
+	class="flex min-h-screen w-full flex-col-reverse items-center justify-center gap-8 border-border text-center lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:text-left"
+>
 	<div class="flex flex-col items-center justify-center gap-5 pt-12 lg:items-start">
 		<h1 class="font-ndot47 text-7xl leading-none tracking-tight md:text-8xl lg:text-9xl">eitaar</h1>
-		<p class="font-share text-base tracking-wide text-muted md:text-lg lg:text-xl">Software Developer / Student</p>
+		<p class="font-share text-base tracking-wide text-muted md:text-lg lg:text-xl">
+			Software Developer / Student
+		</p>
 	</div>
 	<Image
 		class="h-48 w-48 md:h-64 md:w-64 lg:h-96 lg:w-96"
@@ -154,6 +163,7 @@ git commit -m "feat(responsive): stack hero vertically on mobile"
 ### Task 3: About section
 
 **Files:**
+
 - Modify: `src/pages/index.astro:34-48`
 
 - [ ] **Step 1: Replace the About block**
@@ -167,8 +177,8 @@ In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 34-48:
 		<p class="col-span-9 text-xl text-pretty">
 			I am a software developer, focused on the frontend. I'm currently learning Rust to try
 			something other than web and build native applications, drawn by its performance and the
-			chance to work with physical devices. Outside of work, I like to spend time reading books
-			and comics or listening to music.
+			chance to work with physical devices. Outside of work, I like to spend time reading books and
+			comics or listening to music.
 		</p>
 		<PixelIcon
 			aria-label="pixel art icon"
@@ -181,14 +191,16 @@ In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 34-48:
 with:
 
 ```astro
-<div class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36">
+<div
+	class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+>
 	<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">About</h2>
 	<div class="flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-11">
 		<p class="text-base text-pretty md:text-lg lg:col-span-9 lg:text-xl">
 			I am a software developer, focused on the frontend. I'm currently learning Rust to try
 			something other than web and build native applications, drawn by its performance and the
-			chance to work with physical devices. Outside of work, I like to spend time reading books
-			and comics or listening to music.
+			chance to work with physical devices. Outside of work, I like to spend time reading books and
+			comics or listening to music.
 		</p>
 		<PixelIcon
 			aria-label="pixel art icon"
@@ -215,6 +227,7 @@ git commit -m "feat(responsive): stack About copy and icon on mobile"
 ### Task 4: Skills section
 
 **Files:**
+
 - Modify: `src/pages/index.astro:49-72`
 
 - [ ] **Step 1: Replace the Skills block**
@@ -251,7 +264,9 @@ In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 49-72:
 with:
 
 ```astro
-<div class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36">
+<div
+	class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+>
 	<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">Skills</h2>
 	<ul class="grid w-full grid-cols-2 gap-y-8 lg:grid-cols-4 lg:gap-y-0">
 		{
@@ -294,6 +309,7 @@ git commit -m "feat(responsive): two-column skills grid on mobile"
 ### Task 5: Top Projects heading + Project component
 
 **Files:**
+
 - Modify: `src/pages/index.astro:73-78`
 - Modify: `src/components/Project.astro:15-34`
 
@@ -313,8 +329,12 @@ In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 73-78:
 with:
 
 ```astro
-<div class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36">
-	<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">Top Projects</h2>
+<div
+	class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+>
+	<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">
+		Top Projects
+	</h2>
 	<div class="flex w-full flex-col">
 		{topProjects.map((project) => <Project project={project} />)}
 	</div>
@@ -351,8 +371,13 @@ Open [src/components/Project.astro](../../../src/components/Project.astro). Repl
 with:
 
 ```astro
-<a href={href} class="group flex flex-col items-start gap-3 border-b border-border py-6 last:border-0 lg:flex-row lg:items-center lg:gap-8 lg:py-8">
-	<span class="font-share text-xs tracking-wider text-muted lg:w-20 lg:shrink-0 lg:text-sm">{year}</span>
+<a
+	href={href}
+	class="group flex flex-col items-start gap-3 border-b border-border py-6 last:border-0 lg:flex-row lg:items-center lg:gap-8 lg:py-8"
+>
+	<span class="font-share text-xs tracking-wider text-muted lg:w-20 lg:shrink-0 lg:text-sm"
+		>{year}</span
+	>
 	<div class="min-w-0 flex-1">
 		<h3 class="mb-2 text-3xl leading-none font-bold tracking-tight lg:text-4xl">{title}</h3>
 		<ul
@@ -369,7 +394,9 @@ with:
 		</ul>
 	</div>
 	<p class="text-sm leading-relaxed text-muted lg:w-80 lg:shrink-0 lg:text-base">{summary}</p>
-	<ArrowSvg class="hidden h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1 lg:block" />
+	<ArrowSvg
+		class="hidden h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1 lg:block"
+	/>
 </a>
 ```
 
@@ -390,6 +417,7 @@ git commit -m "feat(responsive): stack project cards on mobile"
 ### Task 6: Contact section
 
 **Files:**
+
 - Modify: `src/pages/index.astro:79-113`
 
 - [ ] **Step 1: Replace the Contact block**
@@ -437,7 +465,9 @@ In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 79-113
 with:
 
 ```astro
-<div class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36">
+<div
+	class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+>
 	{
 		contacts
 			.filter((c) => c.big)
@@ -446,7 +476,9 @@ with:
 					href={contact.link}
 					class="group flex w-full items-center justify-between border-border pb-4 lg:pb-8"
 				>
-					<span class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-7xl">{contact.name}</span>
+					<span class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-7xl">
+						{contact.name}
+					</span>
 					<ArrowSvg class="h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1" />
 				</a>
 			))
@@ -491,6 +523,7 @@ git commit -m "feat(responsive): scale contact links and stack small contacts on
 ### Task 7: Header nav safety tweak
 
 **Files:**
+
 - Modify: `src/components/Header.astro:13`
 
 - [ ] **Step 1: Replace the nav `<ul>` opening tag**
@@ -498,13 +531,13 @@ git commit -m "feat(responsive): scale contact links and stack small contacts on
 Open [src/components/Header.astro](../../../src/components/Header.astro) line 13. Replace:
 
 ```astro
-<ul class="flex gap-4 font-share text-lg text-muted">
+<ul class="flex gap-4 font-share text-lg text-muted"></ul>
 ```
 
 with:
 
 ```astro
-<ul class="flex gap-3 font-share text-lg text-muted sm:gap-4">
+<ul class="flex gap-3 font-share text-lg text-muted sm:gap-4"></ul>
 ```
 
 - [ ] **Step 2: Type check**
@@ -539,15 +572,16 @@ Expected: server reachable at `http://localhost:4321`.
 
 In the browser, open DevTools → Responsive Design Mode. Test these widths in order:
 
-| Width | Label | Expectation |
-|---|---|---|
-| 375px | iPhone SE | Avatar above logo; 2-col skills; stacked projects; arrow hidden; 1-col small contacts; footer stacked |
-| 414px | Large mobile | Same shape as 375px |
-| 768px | Tablet (md) | Padding widens to `px-12`; section padding `py-28`; About text `text-lg`; footer side-by-side; small contacts 3-col |
+| Width  | Label        | Expectation                                                                                                                                  |
+| ------ | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| 375px  | iPhone SE    | Avatar above logo; 2-col skills; stacked projects; arrow hidden; 1-col small contacts; footer stacked                                        |
+| 414px  | Large mobile | Same shape as 375px                                                                                                                          |
+| 768px  | Tablet (md)  | Padding widens to `px-12`; section padding `py-28`; About text `text-lg`; footer side-by-side; small contacts 3-col                          |
 | 1024px | Desktop (lg) | Identical to current production: side-by-side hero, 4-col skills, horizontal project cards with arrow, large contact text, 12-col About grid |
-| 1440px | Wide desktop | Identical to 1024px proportions, no overflow |
+| 1440px | Wide desktop | Identical to 1024px proportions, no overflow                                                                                                 |
 
 For each width, run through:
+
 1. No horizontal scroll on `<body>` (DevTools → Computed → check `scrollWidth` vs `clientWidth`).
 2. Hero, About, Skills, Projects, Contacts each render per the table above.
 3. Theme toggle still works (click moon icon → palette flips).

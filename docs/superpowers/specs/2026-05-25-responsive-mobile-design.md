@@ -38,13 +38,13 @@
 
 ### Layout & Footer
 
-| Target | Current | Mobile (base) | md | lg |
-|---|---|---|---|---|
-| `<main>` horizontal padding | `px-48` | `px-6` | `md:px-12` | `lg:px-48` |
-| Footer horizontal padding | `px-48` | `px-6` | `md:px-12` | `lg:px-48` |
-| Footer inner flex | `flex items-center justify-between` | `flex-col items-start gap-2` | `md:flex-row md:items-center md:justify-between` | (md applies) |
-| Section vertical padding (`py-36`) | `py-36` | `py-20` | `md:py-28` | `lg:py-36` |
-| Section gap (`gap-16`) | `gap-16` | `gap-8` | `md:gap-12` | `lg:gap-16` |
+| Target                             | Current                             | Mobile (base)                | md                                               | lg           |
+| ---------------------------------- | ----------------------------------- | ---------------------------- | ------------------------------------------------ | ------------ |
+| `<main>` horizontal padding        | `px-48`                             | `px-6`                       | `md:px-12`                                       | `lg:px-48`   |
+| Footer horizontal padding          | `px-48`                             | `px-6`                       | `md:px-12`                                       | `lg:px-48`   |
+| Footer inner flex                  | `flex items-center justify-between` | `flex-col items-start gap-2` | `md:flex-row md:items-center md:justify-between` | (md applies) |
+| Section vertical padding (`py-36`) | `py-36`                             | `py-20`                      | `md:py-28`                                       | `lg:py-36`   |
+| Section gap (`gap-16`)             | `gap-16`                            | `gap-8`                      | `md:gap-12`                                      | `lg:gap-16`  |
 
 ### Hero (index.astro)
 

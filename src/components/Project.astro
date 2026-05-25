@@ -12,8 +12,13 @@ const year = pubDate.getFullYear();
 const href = demoUrl ?? repoUrl ?? "#";
 ---
 
-<a href={href} class="group flex flex-col items-start gap-3 border-b border-border py-6 last:border-0 lg:flex-row lg:items-center lg:gap-8 lg:py-8">
-	<span class="font-share text-xs tracking-wider text-muted lg:w-20 lg:shrink-0 lg:text-sm">{year}</span>
+<a
+	href={href}
+	class="group flex flex-col items-start gap-3 border-b border-border py-6 last:border-0 lg:flex-row lg:items-center lg:gap-8 lg:py-8"
+>
+	<span class="font-share text-xs tracking-wider text-muted lg:w-20 lg:shrink-0 lg:text-sm"
+		>{year}</span
+	>
 	<div class="min-w-0 flex-1">
 		<h3 class="mb-2 text-3xl leading-none font-bold tracking-tight lg:text-4xl">{title}</h3>
 		<ul
@@ -30,5 +35,7 @@ const href = demoUrl ?? repoUrl ?? "#";
 		</ul>
 	</div>
 	<p class="text-sm leading-relaxed text-muted lg:w-80 lg:shrink-0 lg:text-base">{summary}</p>
-	<ArrowSvg class="hidden h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1 lg:block" />
+	<ArrowSvg
+		class="hidden h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1 lg:block"
+	/>
 </a>
