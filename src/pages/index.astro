@@ -16,13 +16,19 @@ const topProjects = projects
 ---
 
 <Layout title="eitaar" description="eitaar's portfolio">
-	<div class="flex min-h-screen w-full items-center justify-between border-border">
-		<div class="flex flex-col items-start justify-center gap-5 pt-12">
-			<h1 class="font-ndot47 text-9xl leading-none tracking-tight">eitaar</h1>
-			<p class="font-share text-xl tracking-wide text-muted">Software Developer / Student</p>
+	<div
+		class="flex min-h-screen w-full flex-col-reverse items-center justify-center gap-8 border-border text-center lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:text-left"
+	>
+		<div class="flex flex-col items-center justify-center gap-5 pt-12 lg:items-start">
+			<h1 class="font-ndot47 text-7xl leading-none tracking-tight md:text-8xl lg:text-9xl">
+				eitaar
+			</h1>
+			<p class="font-share text-base tracking-wide text-muted md:text-lg lg:text-xl">
+				Software Developer / Student
+			</p>
 		</div>
 		<Image
-			class="h-96 w-96"
+			class="h-48 w-48 md:h-64 md:w-64 lg:h-96 lg:w-96"
 			src={avatarImg}
 			alt="avatar image"
 			fetchpriority={"high"}
@@ -31,10 +37,12 @@ const topProjects = projects
 			quality="mid"
 		/>
 	</div>
-	<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
-		<h2 class="font-ndot47 text-6xl leading-none tracking-wide">About</h2>
-		<div class="grid grid-cols-12 items-start gap-11">
-			<p class="col-span-9 text-xl text-pretty">
+	<div
+		class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+	>
+		<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">About</h2>
+		<div class="flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-11">
+			<p class="text-base text-pretty md:text-lg lg:col-span-9 lg:text-xl">
 				I am a software developer, focused on the frontend. I'm currently learning Rust to try
 				something other than web and build native applications, drawn by its performance and the
 				chance to work with physical devices. Outside of work, I like to spend time reading books
@@ -42,25 +50,27 @@ const topProjects = projects
 			</p>
 			<PixelIcon
 				aria-label="pixel art icon"
-				class="text-text col-span-3 animate-motionspin fill-current"
+				class="text-text w-24 animate-motionspin fill-current md:w-32 lg:col-span-3 lg:w-auto hidden lg:block"
 			/>
 		</div>
 	</div>
-	<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
-		<h2 class="font-ndot47 text-6xl leading-none tracking-wide">Skills</h2>
-		<ul class="grid w-full grid-cols-4">
+	<div
+		class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+	>
+		<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">Skills</h2>
+		<ul class="grid w-full grid-cols-2 gap-y-8 lg:grid-cols-4 lg:gap-y-0">
 			{
 				skillGroups.map((group, i) => (
 					<li
 						class:list={[
-							"flex flex-col gap-6 px-8 first:pl-0 last:pr-0",
-							i !== 0 && "border-l border-border",
+							"flex flex-col gap-6 px-0 lg:px-8 lg:first:pl-0 lg:last:pr-0",
+							i !== 0 && "lg:border-l lg:border-border",
 						]}
 					>
 						<span class="font-share text-sm tracking-wider text-muted uppercase">
 							{group.category}
 						</span>
-						<ul class="flex flex-col gap-3 font-ndot47 text-3xl leading-none tracking-wide">
+						<ul class="flex flex-col gap-3 font-ndot47 text-2xl leading-none tracking-wide md:text-3xl">
 							{group.items.map((item) => (
 								<li>{item}</li>
 							))}
@@ -70,34 +80,42 @@ const topProjects = projects
 			}
 		</ul>
 	</div>
-	<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
-		<h2 class="font-ndot47 text-6xl leading-none tracking-wide">Top Projects</h2>
+	<div
+		class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+	>
+		<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">
+			Top Projects
+		</h2>
 		<div class="flex w-full flex-col">
 			{topProjects.map((project) => <Project project={project} />)}
 		</div>
 	</div>
-	<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
+	<div
+		class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+	>
 		{
 			contacts
 				.filter((c) => c.big)
 				.map((contact) => (
 					<a
 						href={contact.link}
-						class="group flex w-full items-center justify-between border-border pb-8"
+						class="group flex w-full items-center justify-between border-border pb-4 lg:pb-8"
 					>
-						<span class="font-ndot47 text-7xl leading-none tracking-wide">{contact.name}</span>
+						<span class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-7xl">
+							{contact.name}
+						</span>
 						<ArrowSvg class="h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1" />
 					</a>
 				))
 		}
-		<ul class="grid w-full grid-cols-3">
+		<ul class="grid w-full grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-y-0">
 			{
 				contacts
 					.filter((c) => !c.big)
 					.map((contact, i) => (
 						<li
 							class:list={[
-								"flex flex-col gap-3 border-l border-border px-8 first:border-0 first:pl-0 last:pr-0",
+								"flex flex-col gap-3 border-0 px-0 sm:border-l sm:border-border sm:px-8 sm:first:border-0 sm:first:pl-0 sm:last:pr-0",
 							]}
 						>
 							<span class="font-share text-sm tracking-wider text-muted uppercase">
