@@ -16,7 +16,7 @@ const topProjects = projects
 ---
 
 <Layout title="eitaar.dev" description="Eitaar's personal website">
-	<div class="flex min-h-screen w-full items-center justify-between border-b border-border">
+	<div class="flex min-h-screen w-full items-center justify-between border-border">
 		<div class="flex flex-col items-start justify-center gap-5 pt-12">
 			<h1 class="font-ndot47 text-9xl leading-none tracking-tight">eitaar</h1>
 			<p class="font-share text-xl tracking-wide text-muted">Software Developer / Student</p>
@@ -28,9 +28,10 @@ const topProjects = projects
 			fetchpriority={"high"}
 			loading={"eager"}
 			format="avif"
+			quality="mid"
 		/>
 	</div>
-	<div class="flex w-full flex-col items-start justify-start gap-16 border-b border-border py-36">
+	<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
 		<h2 class="font-ndot47 text-6xl leading-none tracking-wide">About</h2>
 		<div class="grid grid-cols-12 items-start gap-11">
 			<p class="col-span-9 text-xl text-pretty">
@@ -45,7 +46,7 @@ const topProjects = projects
 			/>
 		</div>
 	</div>
-	<div class="flex w-full flex-col items-start justify-start gap-16 border-b border-border py-36">
+	<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
 		<h2 class="font-ndot47 text-6xl leading-none tracking-wide">Skills</h2>
 		<ul class="grid w-full grid-cols-4">
 			{
@@ -69,20 +70,20 @@ const topProjects = projects
 			}
 		</ul>
 	</div>
-	<div class="flex w-full flex-col items-start justify-start gap-16 border-b border-border py-36">
+	<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
 		<h2 class="font-ndot47 text-6xl leading-none tracking-wide">Top Projects</h2>
 		<div class="flex w-full flex-col">
 			{topProjects.map((project) => <Project project={project} />)}
 		</div>
 	</div>
-	<div class="flex w-full flex-col items-start justify-start gap-16 border-b border-border py-36">
+	<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
 		{
 			contacts
 				.filter((c) => c.big)
 				.map((contact) => (
 					<a
 						href={contact.link}
-						class="group flex w-full items-center justify-between border-b border-border pb-8"
+						class="group flex w-full items-center justify-between border-border pb-8"
 					>
 						<span class="font-ndot47 text-7xl leading-none tracking-wide">{contact.name}</span>
 						<ArrowSvg class="h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1" />

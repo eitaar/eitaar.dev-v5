@@ -1,6 +1,6 @@
 ---
 const NAV_LINKS = [
-	{ text: "Projects", url: "/projects" },
+	{ text: "Projects", url: "#projects" },
 	{ text: "Contact", url: "#contact" },
 ];
 
@@ -20,9 +20,11 @@ import { Icon } from "astro-icon/components";
 					</li>
 				))
 			}
-			<button id="theme-toggle" class="">
-				<Icon name="bi:moon-stars-fill" class="h-5 w-5" />
-			</button>
+			<li>
+				<button id="theme-toggle" class="" aria-label="toggle dark mode">
+					<Icon name="bi:moon-stars-fill" class="h-5 w-5" />
+				</button>
+			</li>
 		</ul>
 	</nav>
 </header>
