@@ -1,28 +1,26 @@
 ---
 import { Image } from "astro:assets";
 import PixelIcon from "../assets/svg/bottle.svg";
-import TypescriptIcon from "../assets/svg/typescript.svg";
 import avatarImg from "../assets/img/avatar.png";
 import Layout from "../layouts/Layout.astro";
 
-type Skill = {
-	name: string;
-	category: "frontend" | "native" | "other" | "design";
-	note?: string;
-};
-
-const skills: Skill[] = [
-	{ name: "TypeScript", category: "frontend" },
-	{ name: "JavaScript", category: "frontend" },
-	{ name: "Astro", category: "frontend" },
-	{ name: "Vue", category: "frontend" },
-	{ name: "Nuxt", category: "frontend" },
-	{ name: "Tailwind CSS", category: "frontend" },
-	{ name: "GSAP", category: "frontend" },
-	{ name: "HTML & CSS", category: "frontend" },
-	{ name: "Rust", category: "native", note: "Learning" },
-	{ name: "Python", category: "other" },
-	{ name: "Figma", category: "design" },
+const skillGroups = [
+	{
+		category: "Language / Library / Framework",
+		items: ["javascript", "typescript", "vue", "nuxt", "astro", "tailwind", "python"],
+	},
+	{
+		category: "Creativity",
+		items: ["figma", "blockbench", "fusion360"],
+	},
+	{
+		category: "Tools",
+		items: ["git", "github", "vscode", "claude code", "codex"],
+	},
+	{
+		category: "Learning",
+		items: ["rust", "pytorch"],
+	},
 ];
 ---
 
@@ -60,18 +58,23 @@ const skills: Skill[] = [
 		class="flex w-full flex-col items-start justify-start gap-16 border-b border-border py-36"
 	>
 		<h2 class="font-ndot47 text-6xl leading-none tracking-wide">Skills</h2>
-		<ul class="grid w-full grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
+		<ul class="grid w-full grid-cols-4">
 			{
-				skills.map((skill) => (
-					<li class="flex flex-row items-center gap-4">
-						<TypescriptIcon aria-hidden="true" class="text-text h-12 w-12 shrink-0 fill-current" />
-						<div class="flex flex-col items-start gap-1">
-							<p class="font-share text-xl tracking-wide">{skill.name}</p>
-							<p class="text-muted text-xs tracking-wide">
-								{skill.category}
-								{skill.note ? ` · ${skill.note.toLowerCase()}` : ""}
-							</p>
-						</div>
+				skillGroups.map((group, i) => (
+					<li
+						class:list={[
+							"flex flex-col gap-6 px-8 first:pl-0 last:pr-0",
+							i !== 0 && "border-l border-border",
+						]}
+					>
+						<span class="font-share text-sm tracking-wider text-muted uppercase">
+							{group.category}
+						</span>
+						<ul class="flex flex-col gap-3 font-ndot47 text-3xl leading-none tracking-wide">
+							{group.items.map((item) => (
+								<li>{item}</li>
+							))}
+						</ul>
 					</li>
 				))
 			}
@@ -82,5 +85,5 @@ const skills: Skill[] = [
 	</div>
 	<div>
 		<!-- contact -->
-	</div>
+	</div>	
 </Layout>
