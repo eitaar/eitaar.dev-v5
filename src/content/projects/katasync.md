@@ -6,4 +6,5 @@ repoUrl: https://github.com/eitaar/eitaar.dev-v5
 demoUrl: https://eitaar.dev
 techStack: ["javascript", "graphQL"]
 ---
+
 idk
