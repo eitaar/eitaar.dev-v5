@@ -10,7 +10,7 @@ export const skillGroups: SkillGroup[] = [
 	},
 	{
 		category: "Creativity",
-		items: ["figma", "blockbench", "fusion360"],
+		items: ["figma", "blockbench", "fusion360", "affinity"],
 	},
 	{
 		category: "Tools",
@@ -18,6 +18,6 @@ export const skillGroups: SkillGroup[] = [
 	},
 	{
 		category: "Learning",
-		items: ["rust", "pytorch"],
+		items: ["rust", "pytorch", "blender"],
 	},
 ];

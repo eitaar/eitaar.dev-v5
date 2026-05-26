@@ -9,6 +9,7 @@ interface Props {
 	description: string;
 	showHeader?: boolean;
 	showFooter?: boolean;
+	removeTopPadding?: boolean;
 }
 const { title, description, showHeader = true, showFooter = true } = Astro.props;
 ---

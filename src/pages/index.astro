@@ -28,7 +28,7 @@ const topProjects = projects
 			</p>
 		</div>
 		<Image
-			class="h-48 w-48 md:h-64 md:w-64 lg:h-96 lg:w-96"
+			class="h-48 w-48 transition-opacity duration-300 md:h-64 md:w-64 lg:h-96 lg:w-96 dark:opacity-75"
 			src={avatarImg}
 			alt="avatar image"
 			fetchpriority={"high"}
@@ -50,7 +50,7 @@ const topProjects = projects
 			</p>
 			<PixelIcon
 				aria-label="pixel art icon"
-				class="text-text w-24 animate-motionspin fill-current md:w-32 lg:col-span-3 lg:w-auto hidden lg:block"
+				class="text-text hidden w-24 animate-motionspin fill-current md:w-32 lg:col-span-3 lg:block lg:w-auto"
 			/>
 		</div>
 	</div>
@@ -70,7 +70,7 @@ const topProjects = projects
 						<span class="font-share text-sm tracking-wider text-muted uppercase">
 							{group.category}
 						</span>
-						<ul class="flex flex-col gap-3 font-ndot47 text-2xl leading-none tracking-wide md:text-3xl">
+						<ul class="flex flex-col gap-3 font-ndot47 text-2xl leading-none tracking-wide md:text-3xl lg:gap-4">
 							{group.items.map((item) => (
 								<li>{item}</li>
 							))}

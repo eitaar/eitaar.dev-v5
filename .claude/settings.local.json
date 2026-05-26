@@ -5,7 +5,13 @@
 			"mcp__context7__resolve-library-id",
 			"mcp__context7__query-docs",
 			"Bash(git add *)",
-			"Bash(git commit *)"
+			"Bash(git commit *)",
+			"Bash(npx astro *)",
+			"Bash(Select-Object -Last 20)",
+			"PowerShell(npx astro check 2>&1)",
+			"PowerShell(npm run build 2>&1)",
+			"Bash(npm run *)",
+			"Bash(git diff *)"
 		]
 	}
 }
