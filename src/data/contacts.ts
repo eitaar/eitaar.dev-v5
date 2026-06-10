@@ -3,7 +3,6 @@ interface Contact {
 	link: string;
 	label: string;
 	big?: boolean;
-	lasyLoad?: boolean;
 }
 
 export const contacts: Contact[] = [
@@ -22,7 +21,6 @@ export const contacts: Contact[] = [
 		link: "mailto:hi@eitaar.dev",
 		label: "Email",
 		big: true,
-		lasyLoad: true,
 	},
 	{
 		name: "@eitaar",
