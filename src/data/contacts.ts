@@ -27,4 +27,9 @@ export const contacts: Contact[] = [
 		link: "https://discord.gg/RBtJFtTF",
 		label: "Discord",
 	},
+	{
+		name: "@eitaar:matrix.org",
+		link: "https://matrix.to/#/@eitaar:matrix.org",
+		label: "Matrix",
+	},
 ];

@@ -18,6 +18,6 @@ export const skillGroups: SkillGroup[] = [
 	},
 	{
 		category: "Learning",
-		items: ["rust", "pytorch", "blender"],
+		items: ["rust", "pytorch", "blender", "latex"],
 	},
 ];
