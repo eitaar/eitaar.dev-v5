@@ -7,9 +7,9 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, summary, techStack, repoUrl, demoUrl, pubDate } = project.data;
+const { title, summary, techStack, pubDate } = project.data;
 const year = pubDate.getFullYear();
-const href = demoUrl ?? repoUrl ?? "#";
+const href = `/projects/${project.id}`;
 ---
 
 <a

@@ -5,6 +5,7 @@ pubDate: 2026-05-25
 repoUrl: https://github.com/eitaar/eitaar.dev-v5
 demoUrl: https://eitaar.dev
 techStack: ["Astro", "Tailwind"]
+heroImage: ../../assets/img/projects/portfolio.png
 topProject: true
 ---
 

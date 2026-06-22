@@ -5,6 +5,7 @@ pubDate: 2024-04-01
 repoUrl: https://github.com/eitaar/wahoot
 demoUrl: https://wahoot.eitaar.dev
 techStack: ["Nuxt", "Vue", "JavaScript"]
+heroImage: ../../assets/img/projects/wahoot.png
 topProject: true
 ---
 
