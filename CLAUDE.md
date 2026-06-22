@@ -18,7 +18,7 @@ No test suite is configured.
 
 ## Architecture
 
-**Stack:** Astro 6 · Tailwind CSS v4 · TypeScript (strict) · GSAP
+**Stack:** Astro 7 · Tailwind CSS v4 · TypeScript (strict) · GSAP
 
 Tailwind v4 is integrated via the `@tailwindcss/vite` plugin (not PostCSS). The `@theme inline` block in [src/styles/global.css](src/styles/global.css) maps CSS custom properties to Tailwind utilities, so color tokens like `--coral` become `bg-coral`, `text-coral`, etc.
 
@@ -55,4 +55,4 @@ Atkinson Hyperlegible is served locally from `src/assets/fonts/` and registered 
 
 Biome handles JS/TS/JSON/Astro (tabs, 100-char lines, double quotes, LF). Prettier handles Astro files with Tailwind class sorting. Both run on save via VSCode settings. `npm run format` runs both together.
 
-The `astro.config.mjs` `site` field is still set to `https://example.com` — update this before deploying.
+Astro v7 uses Vite 8 and the Rust compiler by default. `compressHTML: true` is set explicitly to preserve v6 whitespace behavior (v7 default changed to `'jsx'`). Markdown is now processed by Sätteri (no custom remark/rehype plugins in use).

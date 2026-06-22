@@ -8,6 +8,7 @@ import icon from "astro-icon";
 // https://astro.build/config
 export default defineConfig({
 	site: "https://eitaar.dev",
+	compressHTML: true,
 	integrations: [mdx(), sitemap(), icon()],
 	vite: {
 		plugins: [tailwindcss()],
