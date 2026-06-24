@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import { getCollection } from "astro:content";
 import avatarImg from "../assets/img/avatar.png";
 import ArrowSvg from "../assets/svg/arrow.svg";
@@ -27,14 +27,16 @@ const topProjects = projects
 				Software Developer / Student
 			</p>
 		</div>
-		<Image
+		<Picture
 			class="h-48 w-48 transition-opacity duration-300 md:h-64 md:w-64 lg:h-96 lg:w-96 dark:opacity-75"
 			src={avatarImg}
 			alt="avatar image"
-			fetchpriority={"high"}
-			loading={"eager"}
-			format="avif"
+			fetchpriority="high"
+			loading="eager"
+			formats={["avif", "webp"]}
 			quality="mid"
+			widths={[192, 256, 384, 512, 768]}
+			sizes="(max-width: 767px) 192px, (max-width: 1023px) 256px, 384px"
 		/>
 	</div>
 	<div
