@@ -4,9 +4,10 @@ import ArrowSvg from "../assets/svg/arrow.svg";
 
 interface Props {
 	project: CollectionEntry<"projects">;
+	index?: number;
 }
 
-const { project } = Astro.props;
+const { project, index = 0 } = Astro.props;
 const { title, summary, techStack, pubDate } = project.data;
 const year = pubDate.getFullYear();
 const href = `/projects/${project.id}`;
@@ -14,13 +15,18 @@ const href = `/projects/${project.id}`;
 
 <a
 	href={href}
-	class="group flex flex-col items-start gap-3 border-b border-border py-6 last:border-0 lg:flex-row lg:items-center lg:gap-8 lg:py-8"
+	class="reveal-item group flex flex-col items-start gap-3 border-b border-border py-6 last:border-0 lg:flex-row lg:items-center lg:gap-8 lg:py-8"
+	style={`--reveal-i: ${index}`}
 >
 	<span class="font-share text-xs tracking-wider text-muted lg:w-20 lg:shrink-0 lg:text-sm"
 		>{year}</span
 	>
 	<div class="min-w-0 flex-1">
-		<h3 class="mb-2 text-3xl leading-none font-bold tracking-tight lg:text-4xl">{title}</h3>
+		<h3
+			class="mb-2 text-3xl leading-none font-bold tracking-tight transition-transform group-hover:translate-x-1 lg:text-4xl"
+		>
+			{title}
+		</h3>
 		<ul
 			class="flex flex-wrap items-center gap-x-2 font-share text-xs tracking-widest text-muted uppercase"
 		>

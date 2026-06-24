@@ -13,6 +13,9 @@ const projects = await getCollection("projects");
 const topProjects = projects
 	.filter((project) => project.data.topProject)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const bigContacts = contacts.filter((c) => c.big);
+const smallContacts = contacts.filter((c) => !c.big);
 ---
 
 <Layout title="eitaar" description="eitaar's portfolio">
@@ -40,10 +43,18 @@ const topProjects = projects
 		/>
 	</div>
 	<div
-		class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
 	>
-		<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">About</h2>
-		<div class="flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-11">
+		<h2
+			class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl"
+			style="--reveal-i: 0"
+		>
+			About
+		</h2>
+		<div
+			class="reveal-item flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-11"
+			style="--reveal-i: 1"
+		>
 			<div class="flex flex-col gap-4 lg:col-span-9">
 				<p class="text-base text-pretty md:text-lg lg:text-xl">
 					I'm a software developer, mostly on the frontend — building for the web and paying close
@@ -63,17 +74,23 @@ const topProjects = projects
 		</div>
 	</div>
 	<div
-		class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
 	>
-		<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">Skills</h2>
+		<h2
+			class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl"
+			style="--reveal-i: 0"
+		>
+			Skills
+		</h2>
 		<ul class="grid w-full grid-cols-2 gap-y-8 lg:grid-cols-4 lg:gap-y-0">
 			{
 				skillGroups.map((group, i) => (
 					<li
 						class:list={[
-							"flex flex-col gap-6 px-0 lg:px-8 lg:first:pl-0 lg:last:pr-0",
+							"reveal-item flex flex-col gap-6 px-0 lg:px-8 lg:first:pl-0 lg:last:pr-0",
 							i !== 0 && "lg:border-l lg:border-border",
 						]}
+						style={`--reveal-i: ${i + 1}`}
 					>
 						<span class="font-share text-sm tracking-wider text-muted uppercase">
 							{group.category}
@@ -89,52 +106,82 @@ const topProjects = projects
 		</ul>
 	</div>
 	<div
-		class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
 	>
-		<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">
+		<h2
+			class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl"
+			style="--reveal-i: 0"
+		>
 			Top Projects
 		</h2>
 		<div class="flex w-full flex-col">
-			{topProjects.map((project) => <Project project={project} />)}
+			{topProjects.map((project, i) => <Project project={project} index={i + 1} />)}
 		</div>
 	</div>
 	<div
-		class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
 	>
 		{
-			contacts
-				.filter((c) => c.big)
-				.map((contact) => (
-					<a
-						href={contact.link}
-						class="group flex w-full items-center justify-between border-border pb-4 lg:pb-8"
-					>
-						<span class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-7xl">
-							{contact.name}
-						</span>
-						<ArrowSvg class="h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1" />
-					</a>
-				))
+			bigContacts.map((contact, i) => (
+				<a
+					href={contact.link}
+					class="reveal-item group flex w-full items-center justify-between border-border pb-4 lg:pb-8"
+					style={`--reveal-i: ${i}`}
+				>
+					<span class="font-ndot47 text-4xl leading-none tracking-wide transition-transform group-hover:translate-x-1 md:text-5xl lg:text-7xl">
+						{contact.name}
+					</span>
+					<ArrowSvg class="h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1" />
+				</a>
+			))
 		}
 		<ul class="grid w-full grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-y-6 lg:grid-cols-4 lg:gap-y-0">
 			{
-				contacts
-					.filter((c) => !c.big)
-					.map((contact, i) => (
-						<li
-							class:list={[
-								"flex flex-col gap-3 border-0 px-0 sm:border-l sm:border-border sm:px-8 sm:last:pr-0 sm:odd:border-l-0 sm:odd:pl-0 lg:first:border-l-0 lg:first:pl-0 lg:odd:border-l lg:odd:pl-8",
-							]}
-						>
-							<span class="font-share text-sm tracking-wider text-muted uppercase">
-								{contact.label}
-							</span>
-							<a href={contact.link} class="font-ndot47 text-3xl leading-none tracking-wide">
-								{contact.name}
-							</a>
-						</li>
-					))
+				smallContacts.map((contact, i) => (
+					<li
+						class:list={[
+							"reveal-item flex flex-col gap-3 border-0 px-0 sm:border-l sm:border-border sm:px-8 sm:last:pr-0 sm:odd:border-l-0 sm:odd:pl-0 lg:first:border-l-0 lg:first:pl-0 lg:odd:border-l lg:odd:pl-8",
+						]}
+						style={`--reveal-i: ${bigContacts.length + i}`}
+					>
+						<span class="font-share text-sm tracking-wider text-muted uppercase">
+							{contact.label}
+						</span>
+						<a href={contact.link} class="font-ndot47 text-3xl leading-none tracking-wide">
+							{contact.name}
+						</a>
+					</li>
+				))
 			}
 		</ul>
 	</div>
 </Layout>
+
+<script>
+	function setupReveal() {
+		const els = document.querySelectorAll<HTMLElement>(".reveal");
+		if (!els.length) return;
+
+		const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		if (reduce || !("IntersectionObserver" in window)) {
+			for (const el of els) el.classList.add("in-view");
+			return;
+		}
+
+		const io = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) {
+						entry.target.classList.add("in-view");
+						io.unobserve(entry.target);
+					}
+				}
+			},
+			{ rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
+		);
+
+		for (const el of els) io.observe(el);
+	}
+
+	setupReveal();
+</script>
