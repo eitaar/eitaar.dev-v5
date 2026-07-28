@@ -1,6 +1,7 @@
 ---
 title: UtilmanShell
 summary: A small program to get a SYSTEM-level shell on the desktop without admin privileges
+category: Utility
 pubDate: 2026-05-16
 repoUrl: https://github.com/eitaar/UtilmanShell
 techStack: ["C++"]

@@ -1,6 +1,7 @@
 ---
 title: Wahoot
 summary: An unofficial third-party Kahoot! client with extra features
+category: Website
 pubDate: 2024-04-01
 repoUrl: https://github.com/eitaar/wahoot
 demoUrl: https://wahoot.eitaar.dev
