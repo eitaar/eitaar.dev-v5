@@ -1,17 +1,28 @@
 {
-	"permissions": {
-		"allow": [
-			"WebFetch(domain:api.anthropic.com)",
-			"mcp__context7__resolve-library-id",
-			"mcp__context7__query-docs",
-			"Bash(git add *)",
-			"Bash(git commit *)",
-			"Bash(npx astro *)",
-			"Bash(Select-Object -Last 20)",
-			"PowerShell(npx astro check 2>&1)",
-			"PowerShell(npm run build 2>&1)",
-			"Bash(npm run *)",
-			"Bash(git diff *)"
-		]
-	}
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(npx astro *)",
+      "Bash(Select-Object -Last 20)",
+      "PowerShell(npx astro check 2>&1)",
+      "PowerShell(npm run build 2>&1)",
+      "Bash(npm run *)",
+      "Bash(git diff *)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_evaluate",
+      "Bash(npx prettier *)",
+      "Bash(npx biome *)",
+      "Bash(git push *)",
+      "Bash(gh pr create --repo eitaar/eitaar.dev-v5 --base main --head feat/scroll-reveal-animations --title 'feat: blur-in scroll reveal animations' --body ' *)",
+      "WebFetch(domain:github.com)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "playwright"
+  ],
+  "enabledPlugins": {}
 }
