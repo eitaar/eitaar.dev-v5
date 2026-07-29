@@ -23,7 +23,7 @@ const projects = defineCollection({
 		z.object({
 			title: z.string(),
 			summary: z.string(),
-			category: z/string(),
+			category: z.string(),
 			pubDate: z.coerce.date(),
 			repoUrl: z.optional(z.url()),
 			demoUrl: z.optional(z.url()),
