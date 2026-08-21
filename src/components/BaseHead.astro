@@ -1,6 +1,5 @@
 ---
 import { Font } from "astro:assets";
-import avatarIcon from "../assets/img/avatar.png";
 
 // import { ClientRouter } from "astro:transitions";
 
@@ -17,8 +16,9 @@ const { title, description } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<Font cssVariable="--font-ndot47" preload />
-<Font cssVariable="--font-share" preload />
+<Font cssVariable="--font-display" preload />
+<Font cssVariable="--font-body" preload />
+<Font cssVariable="--font-mono" />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
@@ -50,6 +50,6 @@ const { title, description } = Astro.props;
 <meta property="twitter:description" content={description} />
 <meta
 	property="twitter:image"
-	content={Astro.site ? new URL(avatarIcon.src, Astro.site) : avatarIcon.src}
+	content={Astro.site ? new URL("avatar.webp", Astro.site) : "/avatar.webp"}
 />
 <!-- <ClientRouter /> -->

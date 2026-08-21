@@ -1,19 +1,21 @@
 ---
-import { Image } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 
 export async function getStaticPaths() {
 	const projects = await getCollection("projects");
-	return projects.map((project) => ({
+	const sorted = projects.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+	return sorted.map((project, index) => ({
 		params: { slug: project.id },
-		props: project,
+		props: { project, index },
 	}));
 }
 
-const project = Astro.props;
-const { title, summary, techStack, repoUrl, demoUrl, pubDate, heroImage } = project.data;
+const { project, index } = Astro.props;
+const { title, summary, techStack, repoUrl, demoUrl, pubDate, category } = project.data;
 const { Content } = await render(project);
+const num = String(index + 1).padStart(2, "0");
+const year = pubDate.getFullYear();
 const formattedDate = pubDate.toLocaleDateString("en-US", {
 	year: "numeric",
 	month: "2-digit",
@@ -21,53 +23,56 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
 });
 
 const meta = [
-	demoUrl && { label: "Website", value: demoUrl, url: demoUrl },
-	repoUrl && { label: "Repository", value: new URL(repoUrl).pathname.slice(1), url: repoUrl },
-	{ label: "Category", value: project.data.category },
-	{ label: "Last Updated", value: formattedDate },
-	{ label: "Tech Stack", value: techStack.join(", ") },
+	demoUrl && { label: "website", value: demoUrl.replace(/^https?:\/\//, ""), url: demoUrl },
+	repoUrl && {
+		label: "repository",
+		value: new URL(repoUrl).pathname.slice(1),
+		url: repoUrl,
+	},
+	{ label: "category", value: category },
+	{ label: "date", value: formattedDate },
+	{ label: "stack", value: techStack.join(" · ") },
 ].filter(Boolean) as { label: string; value: string; url?: string }[];
 ---
 
 <Layout title={title} description={summary}>
-	<div class="flex flex-col items-center pt-32">
-		<h1 class="pb-8 font-share text-4xl leading-none font-bold tracking-wide md:text-5xl">
+	<article class="reveal px-gutter pt-32 pb-10 md:pt-44">
+		<a href="/projects" class="label link-draw hover:text-ink">← back to the archive</a>
+		<p class="label mt-16" style="--reveal-i: 0">
+			entry {num} / {year}
+		</p>
+		<h1
+			class="reveal-item mt-4 font-display text-[clamp(2.8rem,9vw,8rem)] leading-[0.95] font-light tracking-tight text-balance"
+			style="--reveal-i: 1"
+		>
 			{title}
 		</h1>
+		<p
+			class="reveal-item mt-8 max-w-[54ch] text-lg leading-relaxed text-muted md:text-xl"
+			style="--reveal-i: 2"
+		>
+			{summary}
+		</p>
 
-		{
-			heroImage && (
-				<Image
-					src={heroImage}
-					alt={title}
-					class="max-h-96 w-auto rounded-lg border border-border object-contain"
-					format="avif"
-					quality="mid"
-					fetchpriority={"high"}
-					loading={"eager"}
-				/>
-			)
-		}
+		<hr class="hairline reveal-item mt-14" style="--reveal-i: 3" />
 
-		<h2 class="pt-12 pb-4 font-ndot47 text-3xl leading-none tracking-tight md:text-4xl">
-			Overview
-		</h2>
-		<hr class="w-7/10 border-border" />
-
-		<dl class="w-7/10 pt-4">
+		<dl>
 			{
-				meta.map((item) => (
-					<div class="flex items-baseline justify-between py-1.5">
-						<dt class="font-share text-lg font-bold tracking-wide md:text-xl">{item.label}</dt>
-						<dd class="text-right font-share text-lg tracking-wider md:text-xl">
+				meta.map((item, i) => (
+					<div
+						class="reveal-item flex flex-wrap items-baseline justify-between gap-x-8 border-b border-line py-4"
+						style={`--reveal-i: ${i + 4}`}
+					>
+						<dt class="label">{item.label}</dt>
+						<dd class="max-w-[60ch] text-sm break-all md:text-base">
 							{item.url ? (
 								<a
 									href={item.url}
 									target="_blank"
 									rel="noopener noreferrer"
-									class="underline underline-offset-2 hover:text-muted"
+									class="link-draw hover:text-accent"
 								>
-									{item.value}
+									{item.value} ↗
 								</a>
 							) : (
 								item.value
@@ -78,8 +83,12 @@ const meta = [
 			}
 		</dl>
 
-		<!-- <div class="w-full pt-8 text-base text-pretty md:text-lg [&>*+*]:mt-6">
-			<Content />
-		</div> -->
-	</div>
+		{
+			Content && (
+				<div class="mt-14 max-w-[62ch] text-base leading-relaxed md:text-lg [&>*+*]:mt-5">
+					<Content />
+				</div>
+			)
+		}
+	</article>
 </Layout>

@@ -1,7 +1,12 @@
 [data-theme="light"] {
 	color-scheme: light;
-	--bg: #ffffff;
-	--content: #1a1a1c;
-	--muted: #626264;
-	--border: #d8d8d8;
+	--paper: #f1ebdd;
+	--paper-deep: #e6ddc9;
+	--ink: #211a13;
+	--muted: #7c7060;
+	--line: #d8cdb6;
+	--accent: #8f3a1f;
+	/* artwork tokens */
+	--art-base: #e3d8bf;
+	--art-pigment: #2a1d10;
 }

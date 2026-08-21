@@ -1,41 +1,31 @@
 ---
-import { Image } from "astro:assets";
-import NotFoundImage from "../assets/img/404.png";
 import Layout from "../layouts/Layout.astro";
-import "../styles/global.css";
 ---
 
 <Layout
-	title="404 Not Found"
+	title="404 — not found"
 	description="The page you are looking for does not exist."
 	showHeader={false}
 	showFooter={false}
 >
-	<div class="flex min-h-screen w-full flex-col items-center justify-center gap-6 p-8">
-		<Image
-			src={NotFoundImage}
-			alt="404 Not Found"
-			width={600}
-			loading="eager"
-			fetchpriority="high"
-			format="avif"
-		/>
-		<p class="text-center text-lg text-pretty text-muted">
-			The page you are looking for does not seem to exist.
-		</p>
-		<a href="/" class="text-center text-lg text-pretty text-muted underline hover:text-content">
-			Go back to the Top page
-		</a>
-	</div>
-	<p class="absolute! right-4 bottom-4 z-30 text-xs text-muted md:text-sm">
-		KawaiiLogos by
-		<a
-			href="https://github.com/SAWARATSUKI/KawaiiLogos"
-			target="_blank"
-			rel="noopener noreferrer"
-			class="underline hover:text-content"
-		>
-			SAWARATSUKI
-		</a>
-	</p>
+	<section class="flex min-h-svh flex-col justify-between px-gutter py-10">
+		<p class="label">eitaar.dev — a page out of the index</p>
+		<div>
+			<h1
+				aria-label="404, page not found"
+				class="font-display leading-[0.85] font-light tracking-tight select-none"
+			>
+				<span aria-hidden="true" class="block text-[clamp(6rem,28vw,20rem)]">
+					4<span class="hollow">0</span>4
+				</span>
+			</h1>
+			<p class="mt-8 max-w-[38ch] text-muted">
+				This page isn't in the archive. It may have been moved, renamed, or never printed.
+			</p>
+			<a href="/" class="link-draw mt-10 inline-block text-lg hover:text-accent">
+				← back to the index
+			</a>
+		</div>
+		<p class="label">error 404 · not found</p>
+	</section>
 </Layout>

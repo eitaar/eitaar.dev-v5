@@ -1,15 +1,36 @@
 ---
 import { getCollection } from "astro:content";
-import Project from "../../components/Project.astro";
+import ProjectRow from "../../components/ProjectRow.astro";
 import Layout from "../../layouts/Layout.astro";
 
 const rawProjects = await getCollection("projects");
 const projects = rawProjects.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const years = projects.map((p) => p.data.pubDate.getFullYear());
+const minYear = Math.min(...years);
+const maxYear = Math.max(...years);
 ---
 
-<Layout title="projects" description="list of my project">
-	<h3 class="pt-32 pb-8 font-ndot47 text-6xl leading-none tracking-wide">Projects</h3>
-	<div class="flex w-full flex-col">
-		{projects.map((project) => <Project project={project} />)}
-	</div>
+<Layout title="projects" description="the full archive of eitaar's projects">
+	<section
+		data-artwork="projects"
+		data-artwork-scope="projects"
+		class="reveal px-gutter pt-32 pb-10 md:pt-44"
+	>
+		<p class="label reveal-item">(index)</p>
+		<h1
+			class="reveal-item mt-4 font-display text-[clamp(3rem,10vw,9rem)] leading-[0.9] font-light tracking-tight"
+			style="--reveal-i: 1"
+		>
+			the working<br /><span class="italic">archive</span>
+		</h1>
+		<p class="label reveal-item mt-6" style="--reveal-i: 2">
+			{projects.length} entries · {minYear} — {maxYear}
+		</p>
+	</section>
+	<section class="reveal px-gutter pb-16">
+		<div class="[&>*:last-child]:border-b">
+			{projects.map((project, i) => <ProjectRow project={project} index={i} />)}
+		</div>
+	</section>
 </Layout>

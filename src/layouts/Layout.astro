@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import ArtworkCanvas from "../components/ArtworkCanvas.astro";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
@@ -9,7 +10,6 @@ interface Props {
 	description: string;
 	showHeader?: boolean;
 	showFooter?: boolean;
-	removeTopPadding?: boolean;
 }
 const { title, description, showHeader = true, showFooter = true } = Astro.props;
 ---
@@ -29,20 +29,41 @@ const { title, description, showHeader = true, showFooter = true } = Astro.props
 			})();
 		</script>
 	</head>
-	<body class="bg-bg font-share text-content transition-colors duration-300">
+	<body class="font-body text-ink">
+		<a href="#main" class="skip-link">skip to content</a>
+		<ArtworkCanvas />
 		{showHeader && <Header />}
-		<main class="px-6 md:px-12 lg:px-48">
+		<main id="main">
 			<slot />
 		</main>
 		{showFooter && <Footer />}
 		<script>
-			const themeToggleBtn = document.getElementById("theme-toggle");
-			themeToggleBtn?.addEventListener("click", () => {
-				const currentTheme = document.documentElement.getAttribute("data-theme");
-				const newTheme = currentTheme === "dark" ? "light" : "dark";
-				document.documentElement.setAttribute("data-theme", newTheme);
-				localStorage.setItem("theme", newTheme);
-			});
+			function setupReveal() {
+				const els = document.querySelectorAll<HTMLElement>(".reveal");
+				if (!els.length) return;
+
+				const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+				if (reduce || !("IntersectionObserver" in window)) {
+					for (const el of els) el.classList.add("in-view");
+					return;
+				}
+
+				const io = new IntersectionObserver(
+					(entries) => {
+						for (const entry of entries) {
+							if (entry.isIntersecting) {
+								entry.target.classList.add("in-view");
+								io.unobserve(entry.target);
+							}
+						}
+					},
+					{ rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
+				);
+
+				for (const el of els) io.observe(el);
+			}
+
+			setupReveal();
 		</script>
 	</body>
 </html>

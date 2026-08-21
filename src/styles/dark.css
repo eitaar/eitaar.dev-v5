@@ -1,7 +1,12 @@
 [data-theme="dark"] {
 	color-scheme: dark;
-	--bg: #000000;
-	--content: #f1f1f4;
-	--muted: #d8d8d8;
-	--border: #626264;
+	--paper: #171310;
+	--paper-deep: #221c16;
+	--ink: #eae1d1;
+	--muted: #9a8c7a;
+	--line: #372e24;
+	--accent: #c06a45;
+	/* artwork tokens */
+	--art-base: #241d16;
+	--art-pigment: #0c0906;
 }

@@ -1,10 +1,6 @@
 ---
-import { Picture } from "astro:assets";
 import { getCollection } from "astro:content";
-import avatarImg from "../assets/img/avatar.png";
-import ArrowSvg from "../assets/svg/arrow.svg";
-import PixelIcon from "../assets/svg/bottle.svg";
-import Project from "../components/Project.astro";
+import ProjectRow from "../components/ProjectRow.astro";
 import { contacts } from "../data/contacts";
 import { skillGroups } from "../data/skills";
 import Layout from "../layouts/Layout.astro";
@@ -14,170 +10,142 @@ const topProjects = projects
 	.filter((project) => project.data.topProject)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
+const years = projects.map((p) => p.data.pubDate.getFullYear());
+const minYear = Math.min(...years);
+const maxYear = Math.max(...years);
+
 const bigContacts = contacts.filter((c) => c.big);
 const smallContacts = contacts.filter((c) => !c.big);
+
+const numerals = ["i", "ii", "iii", "iv"];
 ---
 
 <Layout title="eitaar" description="eitaar's portfolio">
-	<div
-		class="flex min-h-screen w-full flex-col-reverse items-center justify-center gap-4 border-border text-center lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:text-left"
+	<section
+		data-artwork="hero"
+		class="relative flex min-h-[92svh] flex-col justify-end px-gutter pt-28 pb-10"
 	>
-		<div class="flex flex-col items-center justify-center gap-5 lg:items-start lg:pt-12">
-			<h1 class="font-ndot47 text-7xl leading-none tracking-tight md:text-8xl lg:text-9xl">
-				eitaar
-			</h1>
-			<p class="font-share text-base tracking-wide text-muted md:text-lg lg:text-xl">
-				Software Developer / Student
+		<p class="label absolute top-24 right-[var(--gutter)] hidden md:block lg:right-28">
+			an index of works<br />{minYear} — {maxYear}
+		</p>
+		<p class="label absolute top-1/2 -left-9 hidden origin-center -rotate-90 lg:block">
+			vol. 05 — personal archive
+		</p>
+		<h1
+			aria-label="eitaar"
+			class="font-display leading-[0.82] font-light tracking-[-0.03em] select-none"
+		>
+			<span aria-hidden="true" class="reveal-item block text-[clamp(4.5rem,23vw,21rem)]">eit—</span>
+			<span
+				aria-hidden="true"
+				class="hollow reveal-item block text-[clamp(4.5rem,23vw,21rem)]"
+				style="--reveal-i: 1">aar</span
+			>
+		</h1>
+		<div class="mt-10 flex flex-wrap items-end justify-between gap-6">
+			<p class="max-w-[34ch] text-sm text-muted md:text-base">
+				software developer &amp; student — building small things to see whether they hold up.
+			</p>
+			<p class="label">united kingdom<br />scroll ↓</p>
+		</div>
+	</section>
+
+	<section data-artwork="about" class="reveal px-gutter py-28 md:py-44">
+		<p class="label reveal-item">(01) about</p>
+		<div class="mt-10 grid gap-y-10 md:grid-cols-12 md:gap-x-8">
+			<p
+				class="reveal-item font-display text-[clamp(1.8rem,4.2vw,3.4rem)] leading-[1.12] font-light tracking-tight text-balance md:col-span-10"
+				style="--reveal-i: 1"
+			>
+				I'm a student in the UK. I play with little projects that link separate things, mostly to
+				find out whether they hold up once they're running.
+			</p>
+			<p
+				class="reveal-item max-w-[36ch] text-muted md:col-span-4 md:col-start-9 md:text-right"
+				style="--reveal-i: 2"
+			>
+				A lot of it is just me following a thought and seeing where it lands.
+			</p>
+			<p
+				class="reveal-item font-display text-xl italic md:col-span-5 md:col-start-2 md:mt-12 md:text-2xl"
+				style="--reveal-i: 3"
+			>
+				Off the keyboard, I tend to disappear into books and comics, or just listen to music.
 			</p>
 		</div>
-		<Picture
-			class="h-48 w-48 transition-opacity duration-300 md:h-64 md:w-64 lg:h-96 lg:w-96 dark:opacity-75"
-			src={avatarImg}
-			alt="avatar image"
-			fetchpriority="high"
-			loading="eager"
-			formats={["avif", "webp"]}
-			quality="mid"
-			widths={[192, 256, 384, 512, 768]}
-			sizes="(max-width: 767px) 192px, (max-width: 1023px) 256px, 384px"
-		/>
-	</div>
-	<div
-		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
-	>
-		<h2
-			class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl"
-			style="--reveal-i: 0"
-		>
-			About
-		</h2>
-		<div
-			class="reveal-item flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-11"
-			style="--reveal-i: 1"
-		>
-			<div class="flex flex-col gap-4 lg:col-span-9">
-				<p class="text-base text-pretty md:text-lg lg:text-xl">
-					I'm a student in the UK. I play with little projects that link separate things, mostly to find out whether they hold up once they're running. A lot of it is just me following a thought and seeing where it lands.
-				</p>
-				<p class="text-base text-pretty md:text-lg lg:text-xl">
-					Off the keyboard, I tend to disappear into books and comics, or just listen to music.
-				</p>
-			</div>
-			<PixelIcon
-				aria-label="pixel art icon"
-				class="text-text hidden w-24 animate-motionspin fill-current md:w-32 lg:col-span-3 lg:block lg:w-auto"
-			/>
-		</div>
-	</div>
-	<div
-		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
-	>
-		<h2
-			class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl"
-			style="--reveal-i: 0"
-		>
-			Skills
-		</h2>
-		<ul class="grid w-full grid-cols-2 gap-y-8 lg:grid-cols-4 lg:gap-y-0">
+	</section>
+
+	<section data-artwork="skills" class="reveal px-gutter py-28 md:py-40">
+		<p class="label reveal-item">(02) facility &amp; tools</p>
+		<div class="mt-14 grid gap-y-14 md:grid-cols-12 md:gap-x-8">
 			{
 				skillGroups.map((group, i) => (
-					<li
-						class:list={[
-							"reveal-item flex flex-col gap-6 px-0 lg:px-8 lg:first:pl-0 lg:last:pr-0",
-							i !== 0 && "lg:border-l lg:border-border",
-						]}
+					<div
+						class:list={["reveal-item md:col-span-3", i % 2 === 1 && "md:mt-20"]}
 						style={`--reveal-i: ${i + 1}`}
 					>
-						<span class="font-share text-sm tracking-wider text-muted uppercase">
+						<p class="label">({numerals[i]})</p>
+						<h3 class="mt-2 font-display text-xl font-light italic md:text-2xl">
 							{group.category}
-						</span>
-						<ul class="flex flex-col gap-3 font-ndot47 text-2xl leading-none tracking-wide md:text-3xl lg:gap-4">
+						</h3>
+						<ul class="mt-5 space-y-1.5 text-sm md:text-[0.95rem]">
 							{group.items.map((item) => (
-								<li>{item}</li>
+								<li class="border-b border-line/60 pb-1.5">{item}</li>
 							))}
 						</ul>
-					</li>
+					</div>
 				))
 			}
-		</ul>
-	</div>
-	<div
-		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
-	>
-		<h2
-			class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl"
-			style="--reveal-i: 0"
-		>
-			Top Projects
-		</h2>
-		<div class="flex w-full flex-col">
-			{topProjects.map((project, i) => <Project project={project} index={i + 1} />)}
 		</div>
-	</div>
-	<div
-		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
-	>
-		{
-			bigContacts.map((contact, i) => (
-				<a
-					href={contact.link}
-					class="reveal-item group flex w-full items-center justify-between border-border pb-4 lg:pb-8"
-					style={`--reveal-i: ${i}`}
-				>
-					<span class="font-ndot47 text-4xl leading-none tracking-wide transition-transform group-hover:translate-x-1 md:text-5xl lg:text-7xl">
-						{contact.name}
-					</span>
-					<ArrowSvg class="h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1" />
-				</a>
-			))
-		}
-		<ul class="grid w-full grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-y-6 lg:grid-cols-4 lg:gap-y-0">
+	</section>
+
+	<section data-artwork="projects" class="px-gutter py-28 md:py-40">
+		<div class="reveal">
+			<p class="label reveal-item">(03) selected works</p>
+			<h2
+				class="reveal-item mt-4 font-display text-[clamp(2.6rem,8vw,7rem)] leading-[0.92] font-light tracking-tight"
+				style="--reveal-i: 1"
+			>
+				a working <span class="italic">archive</span>
+			</h2>
+			<p class="label reveal-item mt-6" style="--reveal-i: 2">
+				{topProjects.length} entries · {minYear} — {maxYear} · full index under /projects
+			</p>
+		</div>
+		<div class="reveal mt-16 md:mt-24 [&>*:last-child]:border-b">
+			{topProjects.map((project, i) => <ProjectRow project={project} index={i} />)}
+		</div>
+	</section>
+
+	<section id="contact" data-artwork="contact" class="reveal px-gutter pt-16 pb-16 md:pt-28">
+		<p class="label reveal-item">(04) correspondence</p>
+		<a
+			href={`mailto:${bigContacts[0]?.link.replace("mailto:", "") ?? "hi@eitaar.dev"}`}
+			class="group mt-6 block w-fit"
+			data-artwork-pulse
+		>
+			<span
+				class="reveal-item font-display text-[clamp(2rem,7.5vw,7rem)] leading-none font-light tracking-tight italic transition-colors duration-700 group-hover:text-accent"
+				style="--reveal-i: 1"
+			>
+				hi@eitaar.dev
+			</span>
+		</a>
+		<ul class="mt-20 grid gap-x-10 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
 			{
 				smallContacts.map((contact, i) => (
-					<li
-						class:list={[
-							"reveal-item flex flex-col gap-3 border-0 px-0 sm:border-l sm:border-border sm:px-8 sm:last:pr-0 sm:odd:border-l-0 sm:odd:pl-0 lg:first:border-l-0 lg:first:pl-0 lg:odd:border-l lg:odd:pl-8",
-						]}
-						style={`--reveal-i: ${bigContacts.length + i}`}
-					>
-						<span class="font-share text-sm tracking-wider text-muted uppercase">
-							{contact.label}
-						</span>
-						<a href={contact.link} class="font-ndot47 text-3xl leading-none tracking-wide">
+					<li class="reveal-item border-t border-line pt-4" style={`--reveal-i: ${i + 2}`}>
+						<span class="label">{contact.label}</span>
+						<a
+							href={contact.link}
+							class="link-draw mt-2 inline-block break-all hover:text-accent"
+							rel={contact.link.startsWith("http") ? "noopener noreferrer" : undefined}
+						>
 							{contact.name}
 						</a>
 					</li>
 				))
 			}
 		</ul>
-	</div>
+	</section>
 </Layout>
-
-<script>
-	function setupReveal() {
-		const els = document.querySelectorAll<HTMLElement>(".reveal");
-		if (!els.length) return;
-
-		const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-		if (reduce || !("IntersectionObserver" in window)) {
-			for (const el of els) el.classList.add("in-view");
-			return;
-		}
-
-		const io = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					if (entry.isIntersecting) {
-						entry.target.classList.add("in-view");
-						io.unobserve(entry.target);
-					}
-				}
-			},
-			{ rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
-		);
-
-		for (const el of els) io.observe(el);
-	}
-
-	setupReveal();
-</script>

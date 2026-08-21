@@ -1,0 +1,22 @@
+<canvas id="artwork" aria-hidden="true"></canvas>
+
+<style>
+	#artwork {
+		position: fixed;
+		inset: 0;
+		z-index: -1;
+		display: block;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+</style>
+
+<script>
+	import { bootArtwork } from "../webgl/artwork";
+
+	const canvas = document.getElementById("artwork");
+	if (canvas instanceof HTMLCanvasElement) {
+		bootArtwork(canvas);
+	}
+</script>

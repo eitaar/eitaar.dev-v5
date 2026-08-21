@@ -1,33 +1,51 @@
 ---
-const NAV_LINKS = [
-	{ text: "Projects", url: "/projects" },
-	// { text: "Contact", url: "#contact" },
-];
-
-import { Icon } from "astro-icon/components";
+const NAV_LINKS = [{ text: "projects", url: "/projects" }];
 ---
 
-<header
-	class="fixed top-0 right-0 left-0 z-50 flex h-20 items-center justify-end px-6 py-4 lg:justify-between"
->
-	<a class="hidden font-ndot47 text-lg lg:block" href="/">eitaar</a>
-	<nav>
-		<ul class="flex gap-3 font-share text-lg text-muted sm:gap-4">
+<header class="fixed inset-x-0 top-0 z-40">
+	<nav class="flex items-center justify-between px-gutter py-5" aria-label="primary">
+		<a href="/" class="font-display text-lg tracking-tight italic hover:text-accent">eitaar</a>
+		<ul class="label flex items-baseline gap-6 sm:gap-8">
 			{
 				NAV_LINKS.map((link) => (
 					<li>
-						<a href={link.url} class="hidden lg:block">
+						<a href={link.url} class="link-draw hover:text-ink">
 							{link.text}
 						</a>
 					</li>
 				))
 			}
 			<li>
-				<button id="theme-toggle" class="" aria-label="toggle dark mode">
-					<Icon name="bi:moon-stars-fill" class="hidden h-5 w-5 dark:block" />
-					<Icon name="bi:sun-fill" class="h-5 w-5 dark:hidden" />
+				<button
+					id="theme-toggle"
+					type="button"
+					class="label cursor-pointer uppercase hover:text-ink"
+					aria-label="switch colour scheme"
+				>
+					<span data-theme-label>light</span>
 				</button>
 			</li>
 		</ul>
 	</nav>
 </header>
+
+<script>
+	const btn = document.getElementById("theme-toggle");
+	const label = btn?.querySelector<HTMLElement>("[data-theme-label]");
+
+	function syncThemeUi() {
+		const dark = document.documentElement.getAttribute("data-theme") === "dark";
+		if (label) label.textContent = dark ? "light" : "dark";
+		btn?.setAttribute("aria-label", `switch to ${dark ? "light" : "dark"} theme`);
+	}
+
+	btn?.addEventListener("click", () => {
+		const current = document.documentElement.getAttribute("data-theme");
+		const next = current === "dark" ? "light" : "dark";
+		document.documentElement.setAttribute("data-theme", next);
+		localStorage.setItem("theme", next);
+		syncThemeUi();
+	});
+
+	syncThemeUi();
+</script>

@@ -103,7 +103,7 @@ git commit -m "feat(responsive): mobile-first padding for main and footer"
 Open [src/pages/index.astro](../../../src/pages/index.astro). Replace lines 19-33:
 
 ```astro
-<div class="flex min-h-screen w-full items-center justify-between border-border">
+<div class="border-border flex min-h-screen w-full items-center justify-between">
 	<div class="flex flex-col items-start justify-center gap-5 pt-12">
 		<h1 class="font-ndot47 text-9xl leading-none tracking-tight">eitaar</h1>
 		<p class="font-share text-xl tracking-wide text-muted">Software Developer / Student</p>
@@ -124,7 +124,7 @@ with:
 
 ```astro
 <div
-	class="flex min-h-screen w-full flex-col-reverse items-center justify-center gap-8 border-border text-center lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:text-left"
+	class="border-border flex min-h-screen w-full flex-col-reverse items-center justify-center gap-8 text-center lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:text-left"
 >
 	<div class="flex flex-col items-center justify-center gap-5 pt-12 lg:items-start">
 		<h1 class="font-ndot47 text-7xl leading-none tracking-tight md:text-8xl lg:text-9xl">eitaar</h1>
@@ -171,7 +171,7 @@ git commit -m "feat(responsive): stack hero vertically on mobile"
 In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 34-48:
 
 ```astro
-<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
+<div class="border-border flex w-full flex-col items-start justify-start gap-16 py-36">
 	<h2 class="font-ndot47 text-6xl leading-none tracking-wide">About</h2>
 	<div class="grid grid-cols-12 items-start gap-11">
 		<p class="col-span-9 text-xl text-pretty">
@@ -182,7 +182,7 @@ In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 34-48:
 		</p>
 		<PixelIcon
 			aria-label="pixel art icon"
-			class="text-text col-span-3 animate-motionspin fill-current"
+			class="text-text animate-motionspin col-span-3 fill-current"
 		/>
 	</div>
 </div>
@@ -192,7 +192,7 @@ with:
 
 ```astro
 <div
-	class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+	class="border-border flex w-full flex-col items-start justify-start gap-8 py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
 >
 	<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">About</h2>
 	<div class="flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-11">
@@ -204,7 +204,7 @@ with:
 		</p>
 		<PixelIcon
 			aria-label="pixel art icon"
-			class="text-text w-24 animate-motionspin fill-current md:w-32 lg:col-span-3 lg:w-auto"
+			class="text-text animate-motionspin w-24 fill-current md:w-32 lg:col-span-3 lg:w-auto"
 		/>
 	</div>
 </div>
@@ -235,7 +235,7 @@ git commit -m "feat(responsive): stack About copy and icon on mobile"
 In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 49-72:
 
 ```astro
-<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
+<div class="border-border flex w-full flex-col items-start justify-start gap-16 py-36">
 	<h2 class="font-ndot47 text-6xl leading-none tracking-wide">Skills</h2>
 	<ul class="grid w-full grid-cols-4">
 		{
@@ -243,13 +243,13 @@ In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 49-72:
 				<li
 					class:list={[
 						"flex flex-col gap-6 px-8 first:pl-0 last:pr-0",
-						i !== 0 && "border-l border-border",
+						i !== 0 && "border-border border-l",
 					]}
 				>
 					<span class="font-share text-sm tracking-wider text-muted uppercase">
 						{group.category}
 					</span>
-					<ul class="flex flex-col gap-3 font-ndot47 text-3xl leading-none tracking-wide">
+					<ul class="font-ndot47 flex flex-col gap-3 text-3xl leading-none tracking-wide">
 						{group.items.map((item) => (
 							<li>{item}</li>
 						))}
@@ -265,7 +265,7 @@ with:
 
 ```astro
 <div
-	class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+	class="border-border flex w-full flex-col items-start justify-start gap-8 py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
 >
 	<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">Skills</h2>
 	<ul class="grid w-full grid-cols-2 gap-y-8 lg:grid-cols-4 lg:gap-y-0">
@@ -274,13 +274,13 @@ with:
 				<li
 					class:list={[
 						"flex flex-col gap-6 px-0 lg:px-8 lg:first:pl-0 lg:last:pr-0",
-						i !== 0 && "lg:border-l lg:border-border",
+						i !== 0 && "lg:border-border lg:border-l",
 					]}
 				>
 					<span class="font-share text-sm tracking-wider text-muted uppercase">
 						{group.category}
 					</span>
-					<ul class="flex flex-col gap-3 font-ndot47 text-2xl leading-none tracking-wide md:text-3xl">
+					<ul class="font-ndot47 flex flex-col gap-3 text-2xl leading-none tracking-wide md:text-3xl">
 						{group.items.map((item) => (
 							<li>{item}</li>
 						))}
@@ -318,7 +318,7 @@ git commit -m "feat(responsive): two-column skills grid on mobile"
 In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 73-78:
 
 ```astro
-<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
+<div class="border-border flex w-full flex-col items-start justify-start gap-16 py-36">
 	<h2 class="font-ndot47 text-6xl leading-none tracking-wide">Top Projects</h2>
 	<div class="flex w-full flex-col">
 		{topProjects.map((project) => <Project project={project} />)}
@@ -330,7 +330,7 @@ with:
 
 ```astro
 <div
-	class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+	class="border-border flex w-full flex-col items-start justify-start gap-8 py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
 >
 	<h2 class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl">
 		Top Projects
@@ -346,12 +346,12 @@ with:
 Open [src/components/Project.astro](../../../src/components/Project.astro). Replace lines 15-34:
 
 ```astro
-<a href={href} class="group flex items-center gap-8 border-b border-border py-8 last:border-0">
-	<span class="w-20 shrink-0 font-share text-sm tracking-wider text-muted">{year}</span>
+<a href={href} class="group border-border flex items-center gap-8 border-b py-8 last:border-0">
+	<span class="font-share w-20 shrink-0 text-sm tracking-wider text-muted">{year}</span>
 	<div class="min-w-0 flex-1">
 		<h3 class="mb-2 text-4xl leading-none font-bold tracking-tight">{title}</h3>
 		<ul
-			class="flex flex-wrap items-center gap-x-2 font-share text-xs tracking-widest text-muted uppercase"
+			class="font-share flex flex-wrap items-center gap-x-2 text-xs tracking-widest text-muted uppercase"
 		>
 			{
 				techStack.map((item, i) => (
@@ -373,7 +373,7 @@ with:
 ```astro
 <a
 	href={href}
-	class="group flex flex-col items-start gap-3 border-b border-border py-6 last:border-0 lg:flex-row lg:items-center lg:gap-8 lg:py-8"
+	class="group border-border flex flex-col items-start gap-3 border-b py-6 last:border-0 lg:flex-row lg:items-center lg:gap-8 lg:py-8"
 >
 	<span class="font-share text-xs tracking-wider text-muted lg:w-20 lg:shrink-0 lg:text-sm"
 		>{year}</span
@@ -381,7 +381,7 @@ with:
 	<div class="min-w-0 flex-1">
 		<h3 class="mb-2 text-3xl leading-none font-bold tracking-tight lg:text-4xl">{title}</h3>
 		<ul
-			class="flex flex-wrap items-center gap-x-2 font-share text-xs tracking-widest text-muted uppercase"
+			class="font-share flex flex-wrap items-center gap-x-2 text-xs tracking-widest text-muted uppercase"
 		>
 			{
 				techStack.map((item, i) => (
@@ -425,14 +425,14 @@ git commit -m "feat(responsive): stack project cards on mobile"
 In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 79-113:
 
 ```astro
-<div class="flex w-full flex-col items-start justify-start gap-16 border-border py-36">
+<div class="border-border flex w-full flex-col items-start justify-start gap-16 py-36">
 	{
 		contacts
 			.filter((c) => c.big)
 			.map((contact) => (
 				<a
 					href={contact.link}
-					class="group flex w-full items-center justify-between border-border pb-8"
+					class="group border-border flex w-full items-center justify-between pb-8"
 				>
 					<span class="font-ndot47 text-7xl leading-none tracking-wide">{contact.name}</span>
 					<ArrowSvg class="h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1" />
@@ -446,7 +446,7 @@ In [src/pages/index.astro](../../../src/pages/index.astro), replace lines 79-113
 				.map((contact, i) => (
 					<li
 						class:list={[
-							"flex flex-col gap-3 border-l border-border px-8 first:border-0 first:pl-0 last:pr-0",
+							"border-border flex flex-col gap-3 border-l px-8 first:border-0 first:pl-0 last:pr-0",
 						]}
 					>
 						<span class="font-share text-sm tracking-wider text-muted uppercase">
@@ -466,7 +466,7 @@ with:
 
 ```astro
 <div
-	class="flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+	class="border-border flex w-full flex-col items-start justify-start gap-8 py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
 >
 	{
 		contacts
@@ -474,7 +474,7 @@ with:
 			.map((contact) => (
 				<a
 					href={contact.link}
-					class="group flex w-full items-center justify-between border-border pb-4 lg:pb-8"
+					class="group border-border flex w-full items-center justify-between pb-4 lg:pb-8"
 				>
 					<span class="font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-7xl">
 						{contact.name}
@@ -490,7 +490,7 @@ with:
 				.map((contact, i) => (
 					<li
 						class:list={[
-							"flex flex-col gap-3 border-0 px-0 sm:border-l sm:border-border sm:px-8 sm:first:border-0 sm:first:pl-0 sm:last:pr-0",
+							"sm:border-border flex flex-col gap-3 border-0 px-0 sm:border-l sm:px-8 sm:first:border-0 sm:first:pl-0 sm:last:pr-0",
 						]}
 					>
 						<span class="font-share text-sm tracking-wider text-muted uppercase">
@@ -531,13 +531,13 @@ git commit -m "feat(responsive): scale contact links and stack small contacts on
 Open [src/components/Header.astro](../../../src/components/Header.astro) line 13. Replace:
 
 ```astro
-<ul class="flex gap-4 font-share text-lg text-muted"></ul>
+<ul class="font-share flex gap-4 text-lg text-muted"></ul>
 ```
 
 with:
 
 ```astro
-<ul class="flex gap-3 font-share text-lg text-muted sm:gap-4"></ul>
+<ul class="font-share flex gap-3 text-lg text-muted sm:gap-4"></ul>
 ```
 
 - [ ] **Step 2: Type check**
