@@ -25,7 +25,8 @@
 		}
 
 		function syncTheme() {
-			ink = cssColor("--ink", "#11100e");
+			const dark = document.documentElement.getAttribute("data-theme") === "dark";
+			ink = dark ? cssColor("--content", "#ece8df") : cssColor("--ink", "#11100e");
 			muted = cssColor("--muted", "#716d64");
 		}
 
