@@ -85,7 +85,7 @@ float displacement(vec2 g) {
 
 	// soft pressure under the pointer, with inertia applied on the JS side
 	vec2 dp = g - uPointer.xy;
-	h -= exp(-dot(dp, dp) / max(uPointer.z * uPointer.z, 1e-4)) * uPointer.w * 0.3;
+	h -= exp(-dot(dp, dp) / max(uPointer.z * uPointer.z, 1e-4)) * uPointer.w * 0.25;
 
 	// slow ripples left by disturbances (project hover, focus)
 	for (int i = 0; i < 4; i++) {
@@ -164,11 +164,15 @@ void main() {
 	vec2 wc = mat2(ca, -sa, sa, ca) * vWorld.xz;
 	wc *= vec2(1.0, mix(1.0, 0.26, uStreak)); // narrow flowing paths when streaked
 	float t = uTime * 0.012;
-	float stainN = fbm(wc * uInkScale + vec2(t, -t * 0.65) + fbm(wc * uInkScale * 0.45) * 0.85);
+	float blotchN = fbm(wc * uInkScale + vec2(t, -t * 0.65) + fbm(wc * uInkScale * 0.45) * 0.85);
 
-	// folds collect pigment
+	// whole regions of the sheet stay completely pristine
+	float region = fbm(vWorld.xz * 0.32 + 17.3);
+	float regionMask = smoothstep(-0.45, 0.35, region);
+
+	// folds deepen existing pools; they do not create stains on their own
 	float hn = clamp(vHeight * 0.75 + 0.5, 0.0, 1.0);
-	float fold = pow(1.0 - hn, 1.8);
+	float fold = pow(1.0 - hn, 2.0);
 
 	// wetness: recent disturbances stain temporarily, then dry
 	vec2 g = vWorld.xz / PLANE;
@@ -183,15 +187,22 @@ void main() {
 		}
 	}
 
-	float thr = mix(0.78, 0.30, clamp(uInkAmount, 0.0, 1.0));
-	float stain = smoothstep(thr, thr + 0.28, stainN * 0.72 + fold * 0.34 + wet);
+	// passive blotches: only the upper lobes of the noise stain, masked by region
+	float thr = mix(0.62, 0.16, clamp(uInkAmount, 0.0, 1.0));
+	float passive = smoothstep(thr, thr + 0.30, blotchN * 0.9) * regionMask;
+	passive *= 0.55 + fold * 0.65;
+
+	float stain = clamp(passive + wet * 0.7, 0.0, 1.0);
 
 	// sparse oxide accents — rare, never dominant
 	float accN = snoise(vWorld.xz * 0.55 + 31.7) * 0.5 + 0.5;
-	float acc = smoothstep(0.82, 0.92, accN) * stain;
+	float acc = smoothstep(0.86, 0.94, accN) * stain;
 
 	vec3 albedo = mix(uPaperDeep, uPigment, stain);
 	albedo = mix(albedo, uAccent, acc * 0.75);
+
+	// faint tonal variation — material, not grime
+	albedo *= 0.99 + (snoise(vWorld.xz * 1.4) * 0.5 + 0.5) * 0.02;
 
 	// matte wrap light + valley occlusion
 	vec3 N = normalize(vNormal);
