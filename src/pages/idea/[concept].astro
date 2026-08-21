@@ -1,0 +1,54 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Alive from "../../components/atmosphere/Alive.astro";
+import LivingPaper from "../../components/atmosphere/LivingPaper.astro";
+import InkGlass from "../../components/atmosphere/InkGlass.astro";
+import Specimen from "../../components/atmosphere/Specimen.astro";
+import QuietSpace from "../../components/atmosphere/QuietSpace.astro";
+
+export function getStaticPaths() {
+	return [
+		"alive",
+		"living-paper",
+		"ink-glass",
+		"specimen",
+		"quiet-space",
+	].map((concept) => ({ params: { concept } }));
+}
+
+const { concept } = Astro.params;
+
+const layers = {
+	alive: Alive,
+	"living-paper": LivingPaper,
+	"ink-glass": InkGlass,
+	specimen: Specimen,
+	"quiet-space": QuietSpace,
+};
+
+const Layer = layers[concept as keyof typeof layers] ?? Alive;
+---
+
+<Layout title={`eitaar — ${concept}`} description="Atmosphere concept">
+	<Layer />
+
+	<main class="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-6 md:px-10 lg:px-16">
+		<section class="flex min-h-screen flex-col justify-center gap-5">
+			<h1 class="font-ndot47 text-7xl tracking-tight md:text-9xl">eitaar</h1>
+			<p class="font-share text-muted text-lg">Software Developer / Student</p>
+		</section>
+
+		<section class="border-border border-t py-32">
+			<h2 class="font-ndot47 text-5xl">About</h2>
+			<p class="mt-10 max-w-3xl text-xl leading-relaxed">
+				I'm a student in the UK. I play with little projects that link separate things,
+				mostly to find out whether they hold up once they're running.
+			</p>
+		</section>
+
+		<section class="border-border border-t py-32">
+			<h2 class="font-ndot47 text-5xl">Projects</h2>
+			<p class="mt-10 font-share text-muted">Same content system as the main index.</p>
+		</section>
+	</main>
+</Layout>
