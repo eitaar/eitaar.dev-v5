@@ -1,0 +1,180 @@
+<svg class="liquid-filter-defs" aria-hidden="true" focusable="false">
+	<defs>
+		<filter id="liquid-type-soft" x="-18%" y="-28%" width="136%" height="156%" color-interpolation-filters="sRGB">
+			<feTurbulence
+				id="liquid-soft-noise"
+				type="fractalNoise"
+				baseFrequency="0.008 0.015"
+				numOctaves="2"
+				seed="7"
+				result="noise"
+			/>
+			<feDisplacementMap
+				id="liquid-soft-displace"
+				in="SourceGraphic"
+				in2="noise"
+				scale="18"
+				xChannelSelector="R"
+				yChannelSelector="G"
+			/>
+		</filter>
+
+		<filter id="liquid-type-strong" x="-24%" y="-32%" width="148%" height="164%" color-interpolation-filters="sRGB">
+			<feTurbulence
+				id="liquid-strong-noise"
+				type="fractalNoise"
+				baseFrequency="0.012 0.022"
+				numOctaves="3"
+				seed="19"
+				result="noise"
+			/>
+			<feDisplacementMap
+				id="liquid-strong-displace"
+				in="SourceGraphic"
+				in2="noise"
+				scale="30"
+				xChannelSelector="R"
+				yChannelSelector="B"
+			/>
+		</filter>
+	</defs>
+</svg>
+
+<div class="liquid-ambient" aria-hidden="true">
+	<div class="liquid-ambient__orb liquid-ambient__orb--a"></div>
+	<div class="liquid-ambient__orb liquid-ambient__orb--b"></div>
+</div>
+
+<script>
+	const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+	const softNoise = document.querySelector("#liquid-soft-noise");
+	const strongNoise = document.querySelector("#liquid-strong-noise");
+	const softDisplace = document.querySelector("#liquid-soft-displace");
+	const strongDisplace = document.querySelector("#liquid-strong-displace");
+	const ambient = document.querySelector<HTMLElement>(".liquid-ambient");
+
+	let pointerX = 0.5;
+	let pointerY = 0.5;
+	let targetX = 0.5;
+	let targetY = 0.5;
+	let pointerEnergy = 0;
+	let lastPointerX = 0.5;
+	let lastPointerY = 0.5;
+	let raf = 0;
+
+	function scrollProgress() {
+		const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+		return Math.min(1, Math.max(0, window.scrollY / max));
+	}
+
+	function onPointerMove(event: PointerEvent) {
+		targetX = event.clientX / Math.max(1, window.innerWidth);
+		targetY = event.clientY / Math.max(1, window.innerHeight);
+		const dx = targetX - lastPointerX;
+		const dy = targetY - lastPointerY;
+		pointerEnergy = Math.min(1, pointerEnergy + Math.hypot(dx, dy) * 3.5);
+		lastPointerX = targetX;
+		lastPointerY = targetY;
+	}
+
+	function frame(now: number) {
+		const t = now * 0.001;
+		const scroll = scrollProgress();
+		pointerX += (targetX - pointerX) * 0.055;
+		pointerY += (targetY - pointerY) * 0.055;
+		pointerEnergy *= 0.94;
+
+		const softX = 0.0065 + Math.sin(t * 0.19 + scroll * 4.0) * 0.0015;
+		const softY = 0.014 + Math.cos(t * 0.16 - scroll * 3.0) * 0.0028;
+		const strongX = 0.0105 + Math.sin(t * 0.23 + scroll * 5.0) * 0.0025;
+		const strongY = 0.020 + Math.cos(t * 0.17 + scroll * 3.7) * 0.0045;
+
+		softNoise?.setAttribute("baseFrequency", `${softX.toFixed(4)} ${softY.toFixed(4)}`);
+		strongNoise?.setAttribute("baseFrequency", `${strongX.toFixed(4)} ${strongY.toFixed(4)}`);
+		softNoise?.setAttribute("seed", String(7 + Math.floor(scroll * 5)));
+		strongNoise?.setAttribute("seed", String(19 + Math.floor(scroll * 7)));
+
+		const softScale = 12 + scroll * 13 + pointerEnergy * 14;
+		const strongScale = 22 + scroll * 26 + pointerEnergy * 24;
+		softDisplace?.setAttribute("scale", softScale.toFixed(2));
+		strongDisplace?.setAttribute("scale", strongScale.toFixed(2));
+
+		if (ambient) {
+			ambient.style.setProperty("--liquid-x", `${(pointerX * 100).toFixed(2)}%`);
+			ambient.style.setProperty("--liquid-y", `${(pointerY * 100).toFixed(2)}%`);
+			ambient.style.setProperty("--liquid-scroll", scroll.toFixed(4));
+		}
+
+		raf = requestAnimationFrame(frame);
+	}
+
+	if (!reducedMotion.matches) {
+		window.addEventListener("pointermove", onPointerMove, { passive: true });
+		raf = requestAnimationFrame(frame);
+	} else {
+		softDisplace?.setAttribute("scale", "9");
+		strongDisplace?.setAttribute("scale", "13");
+	}
+
+	window.addEventListener("pagehide", () => cancelAnimationFrame(raf), { once: true });
+</script>
+
+<style is:global>
+	.liquid-filter-defs {
+		position: fixed;
+		width: 0;
+		height: 0;
+		pointer-events: none;
+	}
+
+	.liquid-ambient {
+		--liquid-x: 50%;
+		--liquid-y: 50%;
+		--liquid-scroll: 0;
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		overflow: hidden;
+		pointer-events: none;
+		opacity: 0.62;
+	}
+
+	.liquid-ambient__orb {
+		position: absolute;
+		aspect-ratio: 1;
+		border: 1px solid color-mix(in srgb, var(--content) 22%, transparent);
+		border-radius: 48% 52% 61% 39% / 44% 37% 63% 56%;
+		filter: blur(0.2px);
+	}
+
+	.liquid-ambient__orb--a {
+		width: min(78vw, 62rem);
+		left: calc(var(--liquid-x) - 40vw);
+		top: calc(var(--liquid-y) - 39vw);
+		transform: rotate(calc(var(--liquid-scroll) * 34deg)) scale(calc(0.92 + var(--liquid-scroll) * 0.14));
+	}
+
+	.liquid-ambient__orb--b {
+		width: min(54vw, 42rem);
+		right: -10vw;
+		bottom: -12vw;
+		transform: rotate(calc(-18deg - var(--liquid-scroll) * 52deg));
+		opacity: 0.52;
+	}
+
+	.liquid-type-soft {
+		filter: url(#liquid-type-soft);
+		will-change: filter;
+	}
+
+	.liquid-type-strong {
+		filter: url(#liquid-type-strong);
+		will-change: filter;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.liquid-ambient__orb {
+			transform: none !important;
+		}
+	}
+</style>
