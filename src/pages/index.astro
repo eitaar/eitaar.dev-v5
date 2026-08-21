@@ -1,9 +1,5 @@
 ---
-import { Picture } from "astro:assets";
 import { getCollection } from "astro:content";
-import avatarImg from "../assets/img/avatar.png";
-import ArrowSvg from "../assets/svg/arrow.svg";
-import PixelIcon from "../assets/svg/bottle.svg";
 import Project from "../components/Project.astro";
 import { contacts } from "../data/contacts";
 import { skillGroups } from "../data/skills";
@@ -14,170 +10,157 @@ const topProjects = projects
 	.filter((project) => project.data.topProject)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const bigContacts = contacts.filter((c) => c.big);
-const smallContacts = contacts.filter((c) => !c.big);
+const email = contacts.find((contact) => contact.label === "Email");
+const socialContacts = contacts.filter((contact) => contact.label !== "Email");
 ---
 
-<Layout title="eitaar" description="eitaar's portfolio">
-	<div
-		class="flex min-h-screen w-full flex-col-reverse items-center justify-center gap-4 border-border text-center lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:text-left"
+<Layout title="eitaar" description="eitaar's personal archive — software, experiments, and things in progress">
+	<section
+		class="art-section flex min-h-[100svh] flex-col justify-between px-5 pt-28 pb-6 md:px-8 md:pt-32 lg:px-12 lg:pt-36"
+		data-art-state="0"
 	>
-		<div class="flex flex-col items-center justify-center gap-5 lg:items-start lg:pt-12">
-			<h1 class="font-ndot47 text-7xl leading-none tracking-tight md:text-8xl lg:text-9xl">
-				eitaar
-			</h1>
-			<p class="font-share text-base tracking-wide text-muted md:text-lg lg:text-xl">
-				Software Developer / Student
+		<div class="grid grid-cols-2 gap-6 lg:grid-cols-12">
+			<p class="micro-label lg:col-span-2" data-reveal>01 / introduction</p>
+			<p class="micro-label text-right lg:col-span-3 lg:col-start-10" data-reveal>
+				student / developer<br />somewhere between ideas and working things
 			</p>
 		</div>
-		<Picture
-			class="h-48 w-48 transition-opacity duration-300 md:h-64 md:w-64 lg:h-96 lg:w-96 dark:opacity-75"
-			src={avatarImg}
-			alt="avatar image"
-			fetchpriority="high"
-			loading="eager"
-			formats={["avif", "webp"]}
-			quality="mid"
-			widths={[192, 256, 384, 512, 768]}
-			sizes="(max-width: 767px) 192px, (max-width: 1023px) 256px, 384px"
-		/>
-	</div>
-	<div
-		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
-	>
-		<h2
-			class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl"
-			style="--reveal-i: 0"
-		>
-			About
-		</h2>
-		<div
-			class="reveal-item flex flex-col gap-8 lg:grid lg:grid-cols-12 lg:items-start lg:gap-11"
-			style="--reveal-i: 1"
-		>
-			<div class="flex flex-col gap-4 lg:col-span-9">
-				<p class="text-base text-pretty md:text-lg lg:text-xl">
-					I'm a student in the UK. I play with little projects that link separate things, mostly to find out whether they hold up once they're running. A lot of it is just me following a thought and seeing where it lands.
-				</p>
-				<p class="text-base text-pretty md:text-lg lg:text-xl">
-					Off the keyboard, I tend to disappear into books and comics, or just listen to music.
-				</p>
-			</div>
-			<PixelIcon
-				aria-label="pixel art icon"
-				class="text-text hidden w-24 animate-motionspin fill-current md:w-32 lg:col-span-3 lg:block lg:w-auto"
-			/>
+
+		<div class="my-auto py-16 md:py-24">
+			<h1
+				class="display-type -ml-[0.055em] text-[clamp(7rem,27vw,25rem)] whitespace-nowrap"
+				data-art-react
+				data-art-state="0.35"
+				data-art-energy="0.58"
+				data-reveal
+			>
+				eitaar
+			</h1>
 		</div>
-	</div>
-	<div
-		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+
+		<div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-12 lg:items-end">
+			<p class="editorial-copy max-w-xs text-sm text-muted lg:col-span-3" data-reveal>
+				A personal archive of software, experiments, half-finished thoughts, and the occasional thing that survives contact with reality.
+			</p>
+			<p class="micro-label sm:text-right lg:col-span-2 lg:col-start-11" data-reveal>
+				scroll to disturb<br />the surface ↓
+			</p>
+		</div>
+	</section>
+
+	<section
+		class="art-section grid min-h-[115svh] content-center gap-16 px-5 py-28 md:px-8 md:py-36 lg:grid-cols-12 lg:px-12 lg:py-44"
+		data-art-state="1.2"
 	>
-		<h2
-			class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl"
-			style="--reveal-i: 0"
-		>
-			Skills
-		</h2>
-		<ul class="grid w-full grid-cols-2 gap-y-8 lg:grid-cols-4 lg:gap-y-0">
+		<div class="lg:col-span-2">
+			<p class="micro-label" data-reveal>02 / about</p>
+		</div>
+
+		<div class="lg:col-span-8 lg:col-start-4">
+			<p
+				class="display-type text-[clamp(4rem,10vw,10.5rem)]"
+				data-art-react
+				data-art-state="1.55"
+				data-art-energy="0.56"
+				data-reveal
+			>
+				I follow a thought until it becomes something I can run.
+			</p>
+		</div>
+
+		<div class="grid gap-8 lg:col-span-9 lg:col-start-4 lg:grid-cols-9">
+			<p class="editorial-copy max-w-lg text-base text-muted md:text-lg lg:col-span-5" data-reveal>
+				I'm a student in the UK. I play with little projects that link separate things, mostly to find out whether they hold up once they're running. A lot of it is just me following a thought and seeing where it lands.
+			</p>
+			<p class="editorial-copy max-w-sm text-base text-muted md:text-lg lg:col-span-3 lg:col-start-7" data-reveal>
+				Off the keyboard, I tend to disappear into books and comics, or just listen to music.
+			</p>
+		</div>
+	</section>
+
+	<section class="art-section px-5 py-28 md:px-8 md:py-36 lg:px-12 lg:py-44" data-art-state="2.25">
+		<div class="mb-20 grid gap-6 lg:grid-cols-12 lg:items-end">
+			<p class="micro-label lg:col-span-2" data-reveal>03 / working vocabulary</p>
+			<h2 class="display-type text-[clamp(5rem,13vw,13rem)] lg:col-span-8 lg:col-start-4" data-reveal>
+				things I use,
+				<span class="block italic">things I learn.</span>
+			</h2>
+		</div>
+
+		<div class="grid gap-x-8 gap-y-14 border-t border-border/70 pt-8 sm:grid-cols-2 lg:grid-cols-4">
 			{
-				skillGroups.map((group, i) => (
-					<li
-						class:list={[
-							"reveal-item flex flex-col gap-6 px-0 lg:px-8 lg:first:pl-0 lg:last:pr-0",
-							i !== 0 && "lg:border-l lg:border-border",
-						]}
-						style={`--reveal-i: ${i + 1}`}
+				skillGroups.map((group, index) => (
+					<div
+						data-art-react
+						data-art-state={2.4 + index * 0.16}
+						data-art-energy="0.4"
+						data-reveal
 					>
-						<span class="font-share text-sm tracking-wider text-muted uppercase">
-							{group.category}
-						</span>
-						<ul class="flex flex-col gap-3 font-ndot47 text-2xl leading-none tracking-wide md:text-3xl lg:gap-4">
+						<p class="micro-label mb-7">{String(index + 1).padStart(2, "0")} / {group.category}</p>
+						<ul class="space-y-1">
 							{group.items.map((item) => (
-								<li>{item}</li>
+								<li class="font-display text-3xl leading-none tracking-[-0.035em] md:text-4xl">{item}</li>
 							))}
 						</ul>
-					</li>
+					</div>
 				))
 			}
-		</ul>
-	</div>
-	<div
-		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
-	>
-		<h2
-			class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl"
-			style="--reveal-i: 0"
-		>
-			Top Projects
-		</h2>
-		<div class="flex w-full flex-col">
-			{topProjects.map((project, i) => <Project project={project} index={i + 1} />)}
 		</div>
-	</div>
-	<div
-		class="reveal flex w-full flex-col items-start justify-start gap-8 border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36"
+	</section>
+
+	<section class="art-section px-5 py-28 md:px-8 md:py-36 lg:px-12 lg:py-44" data-art-state="3.25">
+		<div class="mb-20 grid gap-8 lg:grid-cols-12 lg:items-end">
+			<p class="micro-label lg:col-span-2" data-reveal>04 / selected work</p>
+			<h2 class="display-type text-[clamp(6rem,15vw,15rem)] lg:col-span-7 lg:col-start-4" data-reveal>
+				Projects
+			</h2>
+			<a href="/projects" class="micro-label text-link w-fit lg:col-span-2 lg:col-start-11 lg:justify-self-end" data-reveal>
+				full archive ↗
+			</a>
+		</div>
+
+		<div>
+			{topProjects.map((project, index) => <Project project={project} index={index} />)}
+		</div>
+	</section>
+
+	<section
+		class="art-section flex min-h-[110svh] flex-col justify-between px-5 pt-28 pb-7 md:px-8 md:pt-36 lg:px-12 lg:pt-44"
+		data-art-state="6.1"
 	>
+		<div class="grid gap-8 lg:grid-cols-12">
+			<p class="micro-label lg:col-span-2" data-reveal>05 / elsewhere</p>
+			<p class="editorial-copy max-w-md text-muted lg:col-span-4 lg:col-start-8" data-reveal>
+				If something here makes you want to talk, build, question, or send an interesting link, the line is open.
+			</p>
+		</div>
+
 		{
-			bigContacts.map((contact, i) => (
+			email && (
 				<a
-					href={contact.link}
-					class="reveal-item group flex w-full items-center justify-between border-border pb-4 lg:pb-8"
-					style={`--reveal-i: ${i}`}
+					href={email.link}
+					class="display-type my-auto block break-all text-[clamp(4rem,13vw,13rem)] no-underline"
+					data-art-react
+					data-art-state="6.55"
+					data-art-energy="1"
+					data-reveal
 				>
-					<span class="font-ndot47 text-4xl leading-none tracking-wide transition-transform group-hover:translate-x-1 md:text-5xl lg:text-7xl">
-						{contact.name}
-					</span>
-					<ArrowSvg class="h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1" />
+					{email.name}
 				</a>
-			))
+			)
 		}
-		<ul class="grid w-full grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-y-6 lg:grid-cols-4 lg:gap-y-0">
+
+		<div class="grid gap-7 border-t border-border/70 pt-7 sm:grid-cols-2 lg:grid-cols-4">
 			{
-				smallContacts.map((contact, i) => (
-					<li
-						class:list={[
-							"reveal-item flex flex-col gap-3 border-0 px-0 sm:border-l sm:border-border sm:px-8 sm:last:pr-0 sm:odd:border-l-0 sm:odd:pl-0 lg:first:border-l-0 lg:first:pl-0 lg:odd:border-l lg:odd:pl-8",
-						]}
-						style={`--reveal-i: ${bigContacts.length + i}`}
-					>
-						<span class="font-share text-sm tracking-wider text-muted uppercase">
-							{contact.label}
-						</span>
-						<a href={contact.link} class="font-ndot47 text-3xl leading-none tracking-wide">
+				socialContacts.map((contact) => (
+					<a href={contact.link} class="group no-underline" target="_blank" rel="noopener noreferrer" data-reveal>
+						<p class="micro-label mb-2">{contact.label}</p>
+						<p class="font-display text-2xl tracking-[-0.03em] transition-transform duration-300 group-hover:translate-x-1 md:text-3xl">
 							{contact.name}
-						</a>
-					</li>
+						</p>
+					</a>
 				))
 			}
-		</ul>
-	</div>
+		</div>
+	</section>
 </Layout>
-
-<script>
-	function setupReveal() {
-		const els = document.querySelectorAll<HTMLElement>(".reveal");
-		if (!els.length) return;
-
-		const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-		if (reduce || !("IntersectionObserver" in window)) {
-			for (const el of els) el.classList.add("in-view");
-			return;
-		}
-
-		const io = new IntersectionObserver(
-			(entries) => {
-				for (const entry of entries) {
-					if (entry.isIntersecting) {
-						entry.target.classList.add("in-view");
-						io.unobserve(entry.target);
-					}
-				}
-			},
-			{ rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
-		);
-
-		for (const el of els) io.observe(el);
-	}
-
-	setupReveal();
-</script>
