@@ -1,0 +1,380 @@
+---
+import { getCollection } from "astro:content";
+import CalligraphicInk from "../../components/CalligraphicInk.astro";
+import { contacts } from "../../data/contacts";
+import { skillGroups } from "../../data/skills";
+import Layout from "../../layouts/Layout.astro";
+
+const projects = await getCollection("projects");
+const topProjects = projects
+	.filter((project) => project.data.topProject)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const email = contacts.find((contact) => contact.label === "Email");
+const socialContacts = contacts.filter((contact) => contact.label !== "Email");
+---
+
+<Layout
+	title="eitaar — calligraphic ink study"
+	description="An alternate calligraphic ink study for eitaar.dev"
+	showHeader={false}
+	showFooter={false}
+	showArtwork={false}
+>
+	<CalligraphicInk />
+
+	<div class="ink-page relative z-10">
+		<nav class="ink-nav" aria-label="Idea navigation">
+			<a href="/" class="text-link">eitaar</a>
+			<span>idea / calligraphic ink</span>
+			<a href="/idea/liquid-type" class="text-link">liquid type ↗</a>
+			<button id="theme-toggle" type="button" class="text-link cursor-pointer">invert</button>
+		</nav>
+
+		<section class="ink-hero min-h-[100svh] px-5 pt-28 pb-8 md:px-8 lg:px-12" data-reveal>
+			<div class="grid gap-5 lg:grid-cols-12">
+				<p class="ink-note lg:col-span-2">01 / introduction</p>
+				<p class="ink-note text-right lg:col-span-3 lg:col-start-10">
+					student / developer<br />somewhere between ideas and working things
+				</p>
+			</div>
+
+			<div class="ink-title-wrap">
+				<p class="ink-vertical" aria-hidden="true">personal archive / 2026 / ongoing</p>
+				<h1 class="ink-title">eitaar</h1>
+				<p class="ink-subtitle">software, experiments, half-finished thoughts</p>
+			</div>
+
+			<div class="grid gap-6 lg:grid-cols-12 lg:items-end">
+				<p class="editorial-copy max-w-sm text-sm text-muted lg:col-span-4">
+					A personal archive of software, experiments, half-finished thoughts, and the occasional thing that survives contact with reality.
+				</p>
+				<p class="ink-note text-right lg:col-span-2 lg:col-start-11">scroll / the stroke continues ↓</p>
+			</div>
+		</section>
+
+		<section class="ink-about min-h-[125svh] px-5 py-36 md:px-8 lg:px-12" data-reveal>
+			<div class="grid gap-14 lg:grid-cols-12">
+				<p class="ink-note lg:col-span-2">02 / about</p>
+				<div class="lg:col-span-8 lg:col-start-4">
+					<p class="ink-quote">
+						I follow a thought
+						<span class="block italic">until it becomes</span>
+						something I can run.
+					</p>
+				</div>
+			</div>
+
+			<div class="mt-32 grid gap-12 lg:grid-cols-12 lg:items-start">
+				<div class="lg:col-span-5 lg:col-start-2">
+					<p class="ink-index mb-5">A</p>
+					<p class="editorial-copy max-w-xl text-lg text-muted">
+						I'm a student in the UK. I play with little projects that link separate things, mostly to find out whether they hold up once they're running. A lot of it is just me following a thought and seeing where it lands.
+					</p>
+				</div>
+				<div class="lg:col-span-3 lg:col-start-9 lg:mt-40">
+					<p class="ink-index mb-5">B</p>
+					<p class="editorial-copy max-w-sm text-lg text-muted">
+						Off the keyboard, I tend to disappear into books and comics, or just listen to music.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="ink-skills px-5 py-36 md:px-8 lg:px-12" data-reveal>
+			<div class="mb-24 grid gap-8 lg:grid-cols-12 lg:items-end">
+				<p class="ink-note lg:col-span-2">03 / working vocabulary</p>
+				<h2 class="ink-heading lg:col-span-8 lg:col-start-4">
+					things I use,
+					<span class="block italic">things I learn.</span>
+				</h2>
+			</div>
+
+			<div class="ink-skill-grid">
+				{
+					skillGroups.map((group, index) => (
+						<article class:list={["ink-skill-block", index % 2 === 1 && "ink-skill-block--offset"]}>
+							<div class="mb-5 flex items-start justify-between gap-6 border-b border-border/70 pb-3">
+								<p class="ink-index">{String(index + 1).padStart(2, "0")}</p>
+								<p class="ink-note max-w-52 text-right">{group.category}</p>
+							</div>
+							<ul class="ink-skill-items">
+								{group.items.map((item) => <li>{item}</li>)}
+							</ul>
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="ink-projects px-5 py-36 md:px-8 lg:px-12" data-reveal>
+			<div class="mb-28 grid gap-8 lg:grid-cols-12 lg:items-end">
+				<p class="ink-note lg:col-span-2">04 / selected work</p>
+				<h2 class="ink-heading lg:col-span-8 lg:col-start-4">Projects</h2>
+			</div>
+
+			<div class="space-y-32 md:space-y-44">
+				{
+					topProjects.map((project, index) => {
+						const year = project.data.pubDate.getFullYear();
+						return (
+							<a
+								href={`/projects/${project.id}`}
+								class:list={["ink-project group block no-underline", index % 2 === 1 && "ink-project--right"]}
+							>
+								<div class="ink-project-meta">
+									<p class="ink-index">{String(index + 1).padStart(2, "0")}</p>
+									<p class="ink-note">{year}</p>
+								</div>
+								<h3 class="ink-project-title">{project.data.title}</h3>
+								<div class="mt-6 grid gap-6 md:grid-cols-2">
+									<p class="editorial-copy max-w-lg text-sm text-muted md:text-base">{project.data.summary}</p>
+									<p class="ink-note md:text-right">{project.data.techStack.join(" / ")}</p>
+								</div>
+							</a>
+						);
+					})
+				}
+			</div>
+		</section>
+
+		<section class="ink-contact flex min-h-[110svh] flex-col justify-between px-5 pt-36 pb-10 md:px-8 lg:px-12" data-reveal>
+			<div class="grid gap-8 lg:grid-cols-12">
+				<p class="ink-note lg:col-span-2">05 / elsewhere</p>
+				<p class="editorial-copy max-w-md text-muted lg:col-span-4 lg:col-start-8">
+					If something here makes you want to talk, build, question, or send an interesting link, the line is open.
+				</p>
+			</div>
+
+			{
+				email && (
+					<a href={email.link} class="ink-email my-auto block break-all no-underline">
+						<span class="ink-email-mark" aria-hidden="true">→</span>
+						{email.name}
+					</a>
+				)
+			}
+
+			<div class="grid gap-7 border-t border-border/70 pt-7 sm:grid-cols-2 lg:grid-cols-4">
+				{
+					socialContacts.map((contact) => (
+						<a href={contact.link} class="group no-underline" target="_blank" rel="noopener noreferrer">
+							<p class="ink-note mb-2">{contact.label}</p>
+							<p class="font-display text-3xl tracking-[-0.04em] transition-[font-style] group-hover:italic">{contact.name}</p>
+						</a>
+					))
+				}
+			</div>
+		</section>
+	</div>
+</Layout>
+
+<style>
+	.ink-page {
+		overflow: clip;
+	}
+
+	.ink-nav {
+		position: fixed;
+		top: 1rem;
+		left: 1.25rem;
+		right: 1.25rem;
+		z-index: 40;
+		display: grid;
+		grid-template-columns: 1fr auto;
+		gap: 0.35rem 1rem;
+		font-size: 0.64rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--muted);
+	}
+
+	.ink-nav span,
+	.ink-nav a:nth-of-type(2) {
+		display: none;
+	}
+
+	.ink-note {
+		font-family: var(--font-share), sans-serif;
+		font-size: 0.66rem;
+		line-height: 1.35;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--muted);
+	}
+
+	.ink-title-wrap {
+		position: relative;
+		display: flex;
+		min-height: 67svh;
+		align-items: center;
+	}
+
+	.ink-title {
+		margin-left: -0.045em;
+		font-family: var(--font-display), Georgia, serif;
+		font-size: clamp(7rem, 25vw, 24rem);
+		font-weight: 400;
+		font-style: italic;
+		line-height: 0.72;
+		letter-spacing: -0.072em;
+	}
+
+	.ink-subtitle {
+		position: absolute;
+		right: 0;
+		bottom: 16%;
+		max-width: 13rem;
+		font-family: var(--font-display), Georgia, serif;
+		font-size: clamp(1.25rem, 2vw, 2rem);
+		font-style: italic;
+		line-height: 1.05;
+		text-align: right;
+		color: var(--muted);
+	}
+
+	.ink-vertical {
+		position: absolute;
+		right: 0;
+		top: 8%;
+		font-family: var(--font-share), sans-serif;
+		font-size: 0.62rem;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--muted);
+		writing-mode: vertical-rl;
+	}
+
+	.ink-quote {
+		font-family: var(--font-display), Georgia, serif;
+		font-size: clamp(4.3rem, 11vw, 11.4rem);
+		font-weight: 400;
+		line-height: 0.82;
+		letter-spacing: -0.057em;
+	}
+
+	.ink-index {
+		font-family: var(--font-display), Georgia, serif;
+		font-size: 1.4rem;
+		font-style: italic;
+		line-height: 1;
+		color: var(--muted);
+	}
+
+	.ink-heading {
+		font-family: var(--font-display), Georgia, serif;
+		font-size: clamp(5rem, 13vw, 13.5rem);
+		font-weight: 400;
+		line-height: 0.77;
+		letter-spacing: -0.064em;
+	}
+
+	.ink-skill-grid {
+		display: grid;
+		gap: 4rem;
+	}
+
+	.ink-skill-block {
+		max-width: 56rem;
+	}
+
+	.ink-skill-block--offset {
+		margin-left: auto;
+	}
+
+	.ink-skill-items {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.15em 0.4em;
+		font-family: var(--font-display), Georgia, serif;
+		font-size: clamp(3rem, 7.8vw, 7.8rem);
+		font-weight: 400;
+		line-height: 0.82;
+		letter-spacing: -0.052em;
+	}
+
+	.ink-skill-items li:not(:last-child)::after {
+		content: ",";
+		font-style: italic;
+		color: var(--muted);
+	}
+
+	.ink-project {
+		width: min(88rem, 92%);
+	}
+
+	.ink-project--right {
+		margin-left: auto;
+	}
+
+	.ink-project-meta {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1.5rem;
+		border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+		padding-bottom: 0.7rem;
+	}
+
+	.ink-project-title {
+		margin-top: 0.18em;
+		font-family: var(--font-display), Georgia, serif;
+		font-size: clamp(4.7rem, 13vw, 13.5rem);
+		font-weight: 400;
+		line-height: 0.77;
+		letter-spacing: -0.065em;
+		transition:
+			font-style 350ms ease,
+			transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.ink-project:hover .ink-project-title,
+	.ink-project:focus-visible .ink-project-title {
+		transform: translateX(0.03em);
+		font-style: italic;
+	}
+
+	.ink-email {
+		position: relative;
+		font-family: var(--font-display), Georgia, serif;
+		font-size: clamp(3.8rem, 11.5vw, 11.8rem);
+		font-weight: 400;
+		font-style: italic;
+		line-height: 0.8;
+		letter-spacing: -0.06em;
+	}
+
+	.ink-email-mark {
+		display: inline-block;
+		margin-right: 0.15em;
+		font-style: normal;
+		color: var(--muted);
+	}
+
+	@media (min-width: 768px) {
+		.ink-nav {
+			left: 2rem;
+			right: 2rem;
+			grid-template-columns: 1fr 1fr 1fr auto;
+		}
+
+		.ink-nav span,
+		.ink-nav a:nth-of-type(2) {
+			display: block;
+		}
+
+		.ink-nav a:nth-of-type(2) {
+			justify-self: end;
+		}
+
+		.ink-skill-grid {
+			gap: 7rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.ink-project-title {
+			transition: none;
+		}
+	}
+</style>
