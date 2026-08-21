@@ -58,6 +58,9 @@ uniform float uWarp;
 uniform vec2 uFlow;
 uniform vec4 uPointer;     // grid-space x, z, radius, strength
 uniform vec4 uImpulses[4]; // grid-space x, z, age 0..1, strength
+uniform sampler2D uEmbossTex;
+uniform float uEmbossGain;
+uniform float uAgitation;
 
 out vec3 vNormal;
 out vec3 vWorld;
@@ -102,6 +105,13 @@ float displacement(vec2 g) {
 	// soft pressure under the pointer, with inertia applied on the JS side
 	vec2 dp = g - uPointer.xy;
 	h -= exp(-dot(dp, dp) / max(uPointer.z * uPointer.z, 1e-4)) * uPointer.w * 0.25;
+
+	// the hero word presses an impression into the sheet
+	float emboss = texture(uEmbossTex, g * 0.5 + 0.5).r;
+	h -= emboss * uEmbossGain * 0.25;
+
+	// fast scrolling agitates the sheet; it settles once the reader rests
+	h += snoise(g * 3.0 + vec2(uTime * 0.7, -uTime * 0.9)) * uAgitation * 0.12;
 
 	// slow ripples left by disturbances (project hover, focus)
 	for (int i = 0; i < 4; i++) {
@@ -157,6 +167,10 @@ uniform float uFlowAngle;
 uniform float uFarFog;
 uniform vec4 uPointer;
 uniform vec4 uImpulses[4];
+uniform sampler2D uInkTex;
+uniform sampler2D uEmbossTex;
+uniform float uMemoryGain;
+uniform float uEmbossGain;
 
 out vec4 fragColor;
 
@@ -208,7 +222,12 @@ void main() {
 	float passive = smoothstep(thr, thr + 0.30, blotchN * 0.9) * regionMask;
 	passive *= 0.55 + fold * 0.65;
 
-	float stain = clamp(passive + wet * 0.7, 0.0, 1.0);
+	// remembered stains — pigment the reader left behind, slowly drying
+	float memory = texture(uInkTex, g * 0.5 + 0.5).r * uMemoryGain;
+	// pressed letterforms collect a little pigment of their own
+	float pressed = texture(uEmbossTex, g * 0.5 + 0.5).r * uEmbossGain;
+
+	float stain = clamp(passive + wet * 0.7 + memory * 0.85 + pressed * 0.18, 0.0, 1.0);
 
 	// sparse oxide accents — rare, never dominant
 	float accN = snoise(vWorld.xz * 0.55 + 31.7) * 0.5 + 0.5;
@@ -227,6 +246,10 @@ void main() {
 	float diff = pow(ndl, 1.6);
 	float ao = mix(0.72, 1.0, hn);
 
-	fragColor = vec4(albedo * diff * ao, body * fog);
+	// paper fiber tooth — faint anisotropic micro-grain
+	vec2 fp = vWorld.xz * vec2(1.0, 1.7) + vWorld.y * 0.35;
+	float fiber = snoise(fp * 46.0) * 0.6 + snoise(fp * vec2(90.0, 34.0)) * 0.3;
+
+	fragColor = vec4(albedo * diff * ao + fiber * 0.012, body * fog);
 }
 `;

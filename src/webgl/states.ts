@@ -13,6 +13,8 @@ export interface ArtworkState {
 	streak: number;
 	flowAngle: number;
 	farFog: number;
+	dry: number;
+	emboss: number;
 }
 
 export const SECTION_ORDER = ["hero", "about", "skills", "projects", "contact"] as const;
@@ -35,6 +37,8 @@ export const STATES: Record<SectionName, ArtworkState> = {
 		streak: 0,
 		flowAngle: 0.4,
 		farFog: 8.5,
+		dry: 0.04,
+		emboss: 1,
 	},
 	about: {
 		camX: 0.25,
@@ -51,6 +55,8 @@ export const STATES: Record<SectionName, ArtworkState> = {
 		streak: 0.1,
 		flowAngle: 0.9,
 		farFog: 7.0,
+		dry: 0.05,
+		emboss: 0,
 	},
 	skills: {
 		camX: -0.3,
@@ -67,6 +73,8 @@ export const STATES: Record<SectionName, ArtworkState> = {
 		streak: 0.72,
 		flowAngle: 0.55,
 		farFog: 6.5,
+		dry: 0.06,
+		emboss: 0,
 	},
 	projects: {
 		camX: 0,
@@ -83,6 +91,8 @@ export const STATES: Record<SectionName, ArtworkState> = {
 		streak: 0.15,
 		flowAngle: 1.2,
 		farFog: 6.0,
+		dry: 0.05,
+		emboss: 0,
 	},
 	contact: {
 		camX: 0,
@@ -99,6 +109,8 @@ export const STATES: Record<SectionName, ArtworkState> = {
 		streak: 0,
 		flowAngle: 0.4,
 		farFog: 7.5,
+		dry: 0.45,
+		emboss: 0,
 	},
 };
 

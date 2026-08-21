@@ -22,6 +22,38 @@ const PLANE_X = 3.6;
 const PLANE_Z = 2.4;
 const FOV = (40 * Math.PI) / 180;
 
+const INK_VERT = /* glsl */ `#version 300 es
+layout(location = 0) in vec2 aPos;
+void main() {
+	gl_Position = vec4(aPos, 0.0, 1.0);
+}
+`;
+
+/** Bleed + dry + deposit pass for the stain-memory buffer. */
+const INK_UPDATE = /* glsl */ `#version 300 es
+precision highp float;
+uniform sampler2D uPrev;
+uniform float uDecay;
+uniform vec4 uDeposit; // grid-space x, z, radius, amount
+out vec4 o;
+void main() {
+	vec2 res = vec2(textureSize(uPrev, 0));
+	vec2 uv = gl_FragCoord.xy / res;
+	vec2 e = 1.0 / res;
+	float c = texture(uPrev, uv).r;
+	float blur =
+		(texture(uPrev, uv + vec2(e.x, 0.0)).r +
+			texture(uPrev, uv - vec2(e.x, 0.0)).r +
+			texture(uPrev, uv + vec2(0.0, e.y)).r +
+			texture(uPrev, uv - vec2(0.0, e.y)).r) *
+		0.25;
+	c = mix(c, blur, 0.06) * uDecay;
+	vec2 duv = uv - (uDeposit.xy * 0.5 + 0.5);
+	c += exp(-dot(duv, duv) / max(uDeposit.z * uDeposit.z, 1e-5)) * uDeposit.w;
+	o = vec4(clamp(c, 0.0, 1.0), 0.0, 0.0, 1.0);
+}
+`;
+
 interface Tier {
 	segX: number;
 	segZ: number;
@@ -173,6 +205,22 @@ class Inkfield {
 	}));
 	private impulseCursor = 0;
 
+	// stain memory
+	private frame = 0;
+	private lastScrollY = 0;
+	private agitation = 0;
+	private inkRes = 192;
+	private inkTex: WebGLTexture[] = [];
+	private fbo: WebGLFramebuffer[] = [];
+	private inkWrite = 0;
+	private inkProg: WebGLProgram;
+	private inkQuad: WebGLVertexArrayObject;
+	private inkLocs = new Map<string, WebGLUniformLocation | null>();
+
+	// type embossing
+	private embossCanvas: HTMLCanvasElement;
+	private embossTex: WebGLTexture;
+
 	private colors = {
 		paper: [0.09, 0.075, 0.06] as RGB,
 		paperDeep: [0.13, 0.11, 0.09] as RGB,
@@ -208,6 +256,15 @@ class Inkfield {
 		this.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 		this.motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 		this.cur = { ...STATES.hero };
+
+		this.inkRes = this.narrow ? 144 : 192;
+		this.embossCanvas = document.createElement("canvas");
+		this.embossCanvas.width = 768;
+		this.embossCanvas.height = 512;
+		this.embossTex = this.allocTexture();
+		this.inkProg = this.buildInkProgram();
+		this.inkQuad = this.buildQuad();
+		this.initInkTargets();
 
 		this.readColors();
 		this.resize();
@@ -353,6 +410,7 @@ class Inkfield {
 			requestAnimationFrame(() => {
 				this.resizeQueued = false;
 				this.resize();
+				this.updateEmboss();
 				if (this.reduced) this.staticRender();
 			});
 		};
@@ -429,6 +487,160 @@ class Inkfield {
 	}
 
 	private lastClientPrev: { x: number; y: number } | null = null;
+
+	/* ── stain memory ── */
+
+	private allocTexture(): WebGLTexture {
+		const gl = this.gl;
+		const t = gl.createTexture();
+		if (!t) throw new Error("texture alloc failed");
+		gl.bindTexture(gl.TEXTURE_2D, t);
+		gl.texImage2D(
+			gl.TEXTURE_2D,
+			0,
+			gl.RGBA,
+			1,
+			1,
+			0,
+			gl.RGBA,
+			gl.UNSIGNED_BYTE,
+			new Uint8Array([0, 0, 0, 255]),
+		);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		return t;
+	}
+
+	private buildInkProgram(): WebGLProgram {
+		const gl = this.gl;
+		const prog = gl.createProgram();
+		if (!prog) throw new Error("program alloc failed");
+		gl.attachShader(prog, this.compile(gl.VERTEX_SHADER, INK_VERT));
+		gl.attachShader(prog, this.compile(gl.FRAGMENT_SHADER, INK_UPDATE));
+		gl.linkProgram(prog);
+		if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+			throw new Error(gl.getProgramInfoLog(prog) ?? "ink link failed");
+		}
+		return prog;
+	}
+
+	private inkLoc(name: string): WebGLUniformLocation | null {
+		if (!this.inkLocs.has(name)) {
+			this.inkLocs.set(name, this.gl.getUniformLocation(this.inkProg, name));
+		}
+		return this.inkLocs.get(name) ?? null;
+	}
+
+	private buildQuad(): WebGLVertexArrayObject {
+		const gl = this.gl;
+		const vao = gl.createVertexArray();
+		if (!vao) throw new Error("vao alloc failed");
+		gl.bindVertexArray(vao);
+		const buf = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+		gl.enableVertexAttribArray(0);
+		gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+		gl.bindVertexArray(null);
+		return vao;
+	}
+
+	private initInkTargets() {
+		const gl = this.gl;
+		for (let i = 0; i < 2; i++) {
+			const t = gl.createTexture();
+			const f = gl.createFramebuffer();
+			if (!t || !f) throw new Error("ink target alloc failed");
+			gl.bindTexture(gl.TEXTURE_2D, t);
+			gl.texImage2D(
+				gl.TEXTURE_2D,
+				0,
+				gl.RGBA,
+				this.inkRes,
+				this.inkRes,
+				0,
+				gl.RGBA,
+				gl.UNSIGNED_BYTE,
+				null,
+			);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+			gl.bindFramebuffer(gl.FRAMEBUFFER, f);
+			gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t, 0);
+			gl.clearColor(0, 0, 0, 1);
+			gl.clear(gl.COLOR_BUFFER_BIT);
+			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+			this.inkTex.push(t);
+			this.fbo.push(f);
+		}
+	}
+
+	/** Bleed outward, dry, and deposit pigment under a moving pointer. */
+	private updateInk(dtTick: number) {
+		const gl = this.gl;
+		const read = 1 - this.inkWrite;
+		gl.bindFramebuffer(gl.FRAMEBUFFER, this.fbo[this.inkWrite]);
+		gl.viewport(0, 0, this.inkRes, this.inkRes);
+		gl.disable(gl.DEPTH_TEST);
+		gl.disable(gl.BLEND);
+		gl.useProgram(this.inkProg);
+		gl.bindVertexArray(this.inkQuad);
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, this.inkTex[read]);
+		gl.uniform1i(this.inkLoc("uPrev"), 0);
+		gl.uniform1f(this.inkLoc("uDecay"), Math.exp(-this.cur.dry * dtTick));
+		const depositing = !this.reduced && this.pointerEnergy > 0.04;
+		gl.uniform4f(
+			this.inkLoc("uDeposit"),
+			depositing ? this.pointerGx : 10,
+			depositing ? this.pointerGz : 10,
+			0.11,
+			depositing ? Math.min(this.pointerEnergy, 1) * 0.5 : 0,
+		);
+		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+		gl.bindVertexArray(null);
+		gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+		gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+		this.inkWrite = read;
+	}
+
+	/* ── type embossing ── */
+
+	/** Press the hero word into the sheet: DOM rect → grid space → canvas texture. */
+	private updateEmboss() {
+		if (window.scrollY > window.innerHeight * 1.6) return;
+		const ctx = this.embossCanvas.getContext("2d");
+		if (!ctx) return;
+		const w = this.embossCanvas.width;
+		const h = this.embossCanvas.height;
+		ctx.clearRect(0, 0, w, h);
+		const hero = document.querySelector<HTMLElement>('[data-artwork="hero"] h1');
+		if (!hero) return;
+		const r = hero.getBoundingClientRect();
+		const tl = this.raycastToGrid(r.left, r.top);
+		const br = this.raycastToGrid(r.right, r.bottom);
+		if (!tl || !br) return;
+		const x0 = (Math.min(tl[0], br[0]) * 0.5 + 0.5) * w;
+		const y0 = (Math.min(tl[1], br[1]) * 0.5 + 0.5) * h;
+		const blockH = Math.abs(br[1] - tl[1]) * 0.5 * h;
+		const fs = blockH * 0.44;
+		ctx.fillStyle = "#ffffff";
+		ctx.strokeStyle = "#ffffff";
+		ctx.lineWidth = Math.max(fs * 0.018, 2);
+		ctx.textBaseline = "alphabetic";
+		ctx.font = `300 ${fs}px Fraunces, Georgia, serif`;
+		ctx.fillText("eit—", x0, y0 + fs);
+		ctx.strokeText("aar", x0, y0 + fs + fs * 0.84);
+
+		const gl = this.gl;
+		gl.bindTexture(gl.TEXTURE_2D, this.embossTex);
+		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.embossCanvas);
+	}
 
 	/* ── camera / raycast ── */
 
@@ -601,6 +813,16 @@ class Inkfield {
 		gl.uniform1f(this.loc("uFlowAngle"), s.flowAngle);
 		gl.uniform1f(this.loc("uFarFog"), s.farFog);
 
+		gl.activeTexture(gl.TEXTURE0);
+		gl.bindTexture(gl.TEXTURE_2D, this.inkTex[1 - this.inkWrite]);
+		gl.uniform1i(this.loc("uInkTex"), 0);
+		gl.activeTexture(gl.TEXTURE1);
+		gl.bindTexture(gl.TEXTURE_2D, this.embossTex);
+		gl.uniform1i(this.loc("uEmbossTex"), 1);
+		gl.uniform1f(this.loc("uMemoryGain"), this.reduced ? 0 : 1);
+		gl.uniform1f(this.loc("uEmbossGain"), s.emboss);
+		gl.uniform1f(this.loc("uAgitation"), this.reduced ? 0 : this.agitation);
+
 		gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
 		gl.bindVertexArray(null);
 	}
@@ -625,6 +847,18 @@ class Inkfield {
 		const dt = Math.min((now - this.lastNow) / 1000, 0.05);
 		this.lastNow = now;
 		this.update(dt);
+
+		// scroll agitation — fast flicks ripple the sheet, then it settles
+		const y = window.scrollY;
+		const vel = Math.abs(y - this.lastScrollY) / Math.max(dt, 1e-3);
+		this.lastScrollY = y;
+		const target = Math.min(vel / 2600, 1);
+		const k = target > this.agitation ? 1 - Math.exp(-dt * 9) : 1 - Math.exp(-dt * 1.6);
+		this.agitation += (target - this.agitation) * k;
+
+		this.frame++;
+		if (this.frame % 2 === 0) this.updateInk(dt * 2);
+
 		this.draw();
 		this.rafId = requestAnimationFrame(this.loop);
 	};
@@ -642,8 +876,10 @@ class Inkfield {
 	}
 
 	start() {
+		document.fonts.ready.then(() => this.updateEmboss()).catch(() => {});
 		if (this.reduced) {
 			this.staticRender();
+			this.updateEmboss();
 			// keep the composition correct while scrolling, without any motion
 			window.addEventListener(
 				"scroll",
