@@ -1,0 +1,7 @@
+<canvas class="living-paper" aria-hidden="true"></canvas>
+<script>
+const canvas=document.querySelector('.living-paper');
+const ctx=canvas?.getContext('2d');
+if(canvas&&ctx){let t=0;const resize=()=>{canvas.width=innerWidth;canvas.height=innerHeight};addEventListener('resize',resize);resize();function draw(){t+=.003;ctx.clearRect(0,0,canvas.width,canvas.height);ctx.globalAlpha=.08;for(let i=0;i<8;i++){ctx.beginPath();ctx.fillStyle='currentColor';ctx.arc(canvas.width*(.2+i*.11),canvas.height*(.3+Math.sin(t+i)*.08),80+i*30,0,Math.PI*2);ctx.fill()}requestAnimationFrame(draw)}draw()}
+</script>
+<style>.living-paper{position:fixed;inset:0;z-index:0;pointer-events:none}</style>
