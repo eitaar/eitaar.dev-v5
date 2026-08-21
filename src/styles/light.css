@@ -1,7 +1,9 @@
 [data-theme="light"] {
 	color-scheme: light;
-	--bg: #ffffff;
-	--content: #1a1a1c;
-	--muted: #626264;
-	--border: #d8d8d8;
+	--bg: #e9e5dc;
+	--content: #171714;
+	--muted: #69655d;
+	--border: #9e988c;
+	--surface: #c9c3b7;
+	--ink: #171b20;
 }
