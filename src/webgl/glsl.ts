@@ -71,13 +71,29 @@ const vec2 PLANE = vec2(3.6, 2.4);
 
 float surfaceField(vec2 g) {
 	vec2 drift = vec2(uTime * 0.016, uTime * -0.010);
-	vec2 q = vec2(fbm(g * uFreq + drift), fbm(g * uFreq + drift + 5.2));
-	return fbm(g * uFreq + q * uWarp + uFlow * uTime * 0.05);
+
+	// anisotropic pull — the fabric stretches at slightly different rates per axis
+	vec2 q = vec2(
+		fbm(g * uFreq * vec2(1.0, 1.35) + drift),
+		fbm(g * uFreq * vec2(1.3, 1.0) + drift + 5.2)
+	);
+	float f = fbm(g * uFreq + q * uWarp + uFlow * uTime * 0.05);
+
+	// slow global breath — the sheet inhales and exhales
+	float breath = sin(uTime * 0.5) * 0.5 + 0.5;
+
+	// paper creases: thin ridged folds, kept faint
+	float ridge = 1.0 - abs(snoise(g * uFreq * 2.3 + drift * 1.6));
+	ridge *= ridge;
+
+	return f * (0.84 + breath * 0.26) + ridge * 0.12;
 }
 
 // the sheet sinks toward its border — an organic silhouette, not a rectangle
 float edgeMask(vec2 g) {
-	return smoothstep(1.0, 0.42, max(abs(g.x), abs(g.y)));
+	float m = max(abs(g.x), abs(g.y));
+	m += snoise(g * 1.8 + 3.7) * 0.06;
+	return smoothstep(1.0, 0.42, m);
 }
 
 float displacement(vec2 g) {
@@ -101,7 +117,7 @@ float displacement(vec2 g) {
 }
 
 void main() {
-	float eps = 0.04;
+	float eps = 0.05;
 	float h = displacement(aGrid);
 	float hx = displacement(aGrid + vec2(eps, 0.0));
 	float hz = displacement(aGrid + vec2(0.0, eps));
