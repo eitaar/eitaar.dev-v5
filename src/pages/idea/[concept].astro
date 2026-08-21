@@ -9,35 +9,17 @@ import IdeaIndexContent from "../../components/IdeaIndexContent.astro";
 import Layout from "../../layouts/Layout.astro";
 
 const concepts = {
-	alive: {
-		label: "Alive",
-		description: "The existing index, made subtly alive.",
-		component: Alive,
-	},
-	"living-paper": {
-		label: "Living Paper",
-		description: "A quiet paper-and-ink atmosphere around the existing index.",
-		component: LivingPaper,
-	},
-	"ink-glass": {
-		label: "Ink Glass",
-		description: "A soft translucent ink presence behind the existing index.",
-		component: InkGlass,
-	},
-	specimen: {
-		label: "Specimen",
-		description: "The existing index treated like a restrained technical specimen.",
-		component: Specimen,
-	},
-	"quiet-space": {
-		label: "Quiet Space",
-		description: "The existing index placed inside a subtle sense of depth and space.",
-		component: QuietSpace,
-	},
+	alive: { label: "Alive", description: "The existing index, made subtly alive.", component: Alive },
+	"living-paper": { label: "Living Paper", description: "A quiet paper-and-ink atmosphere around the existing index.", component: LivingPaper },
+	"ink-glass": { label: "Ink Glass", description: "A soft translucent ink presence behind the existing index.", component: InkGlass },
+	specimen: { label: "Specimen", description: "The existing index treated like a restrained technical specimen.", component: Specimen },
+	"quiet-space": { label: "Quiet Space", description: "The existing index placed inside a subtle sense of depth and space.", component: QuietSpace },
 } as const;
 
 export function getStaticPaths() {
-	return Object.keys(concepts).map((concept) => ({ params: { concept } }));
+	return ["alive", "living-paper", "ink-glass", "specimen", "quiet-space"].map((concept) => ({
+		params: { concept },
+	}));
 }
 
 const concept = Astro.params.concept as keyof typeof concepts;
