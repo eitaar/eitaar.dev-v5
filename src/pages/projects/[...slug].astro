@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 
@@ -12,74 +11,130 @@ export async function getStaticPaths() {
 }
 
 const project = Astro.props;
-const { title, summary, techStack, repoUrl, demoUrl, pubDate, heroImage } = project.data;
+const { title, summary, techStack, repoUrl, demoUrl, pubDate, category } = project.data;
 const { Content } = await render(project);
-const formattedDate = pubDate.toLocaleDateString("en-US", {
+const formattedDate = pubDate.toLocaleDateString("en-GB", {
 	year: "numeric",
-	month: "2-digit",
+	month: "short",
 	day: "2-digit",
 });
 
 const meta = [
-	demoUrl && { label: "Website", value: demoUrl, url: demoUrl },
-	repoUrl && { label: "Repository", value: new URL(repoUrl).pathname.slice(1), url: repoUrl },
-	{ label: "Category", value: project.data.category },
-	{ label: "Last Updated", value: formattedDate },
-	{ label: "Tech Stack", value: techStack.join(", ") },
-].filter(Boolean) as { label: string; value: string; url?: string }[];
+	{ label: "Category", value: category },
+	{ label: "Date", value: formattedDate },
+	{ label: "Stack", value: techStack.join(" / ") },
+];
 ---
 
-<Layout title={title} description={summary}>
-	<div class="flex flex-col items-center pt-32">
-		<h1 class="pb-8 font-share text-4xl leading-none font-bold tracking-wide md:text-5xl">
-			{title}
-		</h1>
+<Layout title={`${title} / eitaar`} description={summary}>
+	<article>
+		<header
+			class="art-section flex min-h-[100svh] flex-col justify-between px-5 pt-36 pb-8 md:px-8 md:pt-44 lg:px-12 lg:pt-48"
+			data-art-state="4.4"
+		>
+			<div class="grid gap-8 lg:grid-cols-12">
+				<a href="/projects" class="micro-label text-link w-fit lg:col-span-2" data-reveal>← archive</a>
+				<p class="micro-label lg:col-span-3 lg:col-start-10 lg:text-right" data-reveal>{category} / {formattedDate}</p>
+			</div>
 
-		{
-			heroImage && (
-				<Image
-					src={heroImage}
-					alt={title}
-					class="max-h-96 w-auto rounded-lg border border-border object-contain"
-					format="avif"
-					quality="mid"
-					fetchpriority={"high"}
-					loading={"eager"}
-				/>
-			)
-		}
+			<div class="my-auto py-16">
+				<h1
+					class="display-type max-w-[92vw] text-[clamp(5rem,17vw,18rem)]"
+					data-art-react
+					data-art-state="4.85"
+					data-art-energy="0.95"
+					data-reveal
+				>
+					{title}
+				</h1>
+			</div>
 
-		<h2 class="pt-12 pb-4 font-ndot47 text-3xl leading-none tracking-tight md:text-4xl">
-			Overview
-		</h2>
-		<hr class="w-7/10 border-border" />
+			<div class="grid gap-8 border-t border-border/70 pt-6 lg:grid-cols-12">
+				<p class="editorial-copy max-w-xl text-base md:text-lg lg:col-span-5" data-reveal>{summary}</p>
+				<dl class="grid gap-5 sm:grid-cols-3 lg:col-span-6 lg:col-start-7" data-reveal>
+					{meta.map((item) => (
+						<div>
+							<dt class="micro-label mb-2">{item.label}</dt>
+							<dd class="text-sm leading-relaxed text-muted">{item.value}</dd>
+						</div>
+					))}
+				</dl>
+			</div>
+		</header>
 
-		<dl class="w-7/10 pt-4">
-			{
-				meta.map((item) => (
-					<div class="flex items-baseline justify-between py-1.5">
-						<dt class="font-share text-lg font-bold tracking-wide md:text-xl">{item.label}</dt>
-						<dd class="text-right font-share text-lg tracking-wider md:text-xl">
-							{item.url ? (
-								<a
-									href={item.url}
-									target="_blank"
-									rel="noopener noreferrer"
-									class="underline underline-offset-2 hover:text-muted"
-								>
-									{item.value}
-								</a>
-							) : (
-								item.value
-							)}
-						</dd>
-					</div>
-				))
-			}
-		</dl>
+		<section
+			class="art-section grid min-h-[85svh] content-center gap-14 px-5 py-28 md:px-8 md:py-36 lg:grid-cols-12 lg:px-12 lg:py-44"
+			data-art-state="5.35"
+		>
+			<p class="micro-label lg:col-span-2" data-reveal>notes / context</p>
+			<div
+				class="editorial-copy project-prose max-w-3xl text-base leading-relaxed text-content md:text-lg lg:col-span-7 lg:col-start-4"
+				data-reveal
+			>
+				<Content />
+			</div>
+		</section>
 
-		<!-- <div class="w-full pt-8 text-base text-pretty md:text-lg [&>*+*]:mt-6">
-			<Content />
-		</div> -->
-	</div>
+		<section class="border-t border-border/70 px-5 py-16 md:px-8 md:py-20 lg:px-12" data-art-state="5.9">
+			<div class="grid gap-10 lg:grid-cols-12 lg:items-end">
+				<p class="micro-label lg:col-span-2">links / exit</p>
+				<div class="flex flex-col gap-3 lg:col-span-6 lg:col-start-4">
+					{demoUrl && (
+						<a href={demoUrl} target="_blank" rel="noopener noreferrer" class="display-type text-[clamp(3.8rem,8vw,8rem)] no-underline">
+							visit ↗
+						</a>
+					)}
+					{repoUrl && (
+						<a href={repoUrl} target="_blank" rel="noopener noreferrer" class="display-type text-[clamp(3.8rem,8vw,8rem)] no-underline">
+							source ↗
+						</a>
+					)}
+				</div>
+			</div>
+		</section>
+	</article>
 </Layout>
+
+<style>
+	.project-prose :global(h2),
+	.project-prose :global(h3) {
+		font-family: var(--font-display), Georgia, serif;
+		font-weight: 400;
+		letter-spacing: -0.035em;
+		line-height: 0.95;
+		margin-top: 2.5em;
+		margin-bottom: 0.65em;
+	}
+
+	.project-prose :global(h2) {
+		font-size: clamp(2.8rem, 6vw, 5.8rem);
+	}
+
+	.project-prose :global(h3) {
+		font-size: clamp(2rem, 4vw, 3.6rem);
+	}
+
+	.project-prose :global(p),
+	.project-prose :global(ul),
+	.project-prose :global(ol),
+	.project-prose :global(pre),
+	.project-prose :global(blockquote) {
+		margin-top: 1.2em;
+	}
+
+	.project-prose :global(a) {
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+
+	.project-prose :global(code) {
+		font-size: 0.88em;
+	}
+
+	.project-prose :global(pre) {
+		overflow-x: auto;
+		border-top: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
+		padding: 1.25rem 0;
+	}
+</style>
