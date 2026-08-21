@@ -5,7 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, fontProviders } from "astro/config";
 import icon from "astro-icon";
-// https://astro.build/config
+
 export default defineConfig({
 	site: "https://eitaar.dev",
 	compressHTML: true,
@@ -23,19 +23,12 @@ export default defineConfig({
 			styles: ["normal"],
 		},
 		{
-			provider: fontProviders.local(),
-			name: "Ndot47",
-			cssVariable: "--font-ndot47",
-			options: {
-				variants: [
-					{
-						/* Font: Ndot47 Inspired by Nothing | Copyright (c) 2021-2026, “Interactivate” | Licensed under the SIL Open Font License, Version 1.1 (http://scripts.sil.org/OFL) */
-						src: ["./src/assets/fonts/ndot-47-inspired-by-nothing.otf.woff2"],
-						weight: "normal",
-						style: "normal",
-					},
-				],
-			},
+			provider: fontProviders.google(),
+			name: "Cormorant Garamond",
+			cssVariable: "--font-display",
+			fallbacks: ["Georgia", "serif"],
+			weights: [400, 500, 600],
+			styles: ["normal", "italic"],
 		},
 	],
 });
