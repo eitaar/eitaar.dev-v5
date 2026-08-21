@@ -1,2 +1,7 @@
-<div class="ink-glass" aria-hidden="true"></div>
-<style>.ink-glass{position:fixed;inset:10%;z-index:0;pointer-events:none;border-radius:50%;background:radial-gradient(circle,rgba(0,0,0,.12),transparent 65%);filter:blur(40px);animation:float 18s ease-in-out infinite}@keyframes float{50%{transform:translate(4%,3%) scale(1.05)}}</style>
+<canvas class="ink-glass" aria-hidden="true"></canvas>
+<script>
+const canvas=document.querySelector('.ink-glass');
+const ctx=canvas?.getContext('2d');
+if(canvas&&ctx){let t=0;const resize=()=>{canvas.width=innerWidth;canvas.height=innerHeight};addEventListener('resize',resize);resize();function draw(){t+=.004;ctx.clearRect(0,0,canvas.width,canvas.height);const x=canvas.width*(.5+Math.sin(t)*.04),y=canvas.height*(.45+Math.cos(t*.7)*.03);const g=ctx.createRadialGradient(x,y,0,x,y,canvas.width*.45);g.addColorStop(0,'rgba(0,0,0,.08)');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);requestAnimationFrame(draw)}draw()}
+</script>
+<style>.ink-glass{position:fixed;inset:0;z-index:0;pointer-events:none;filter:blur(35px)}</style>
