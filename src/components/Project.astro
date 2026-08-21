@@ -1,6 +1,5 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import ArrowSvg from "../assets/svg/arrow.svg";
 
 interface Props {
 	project: CollectionEntry<"projects">;
@@ -8,40 +7,39 @@ interface Props {
 }
 
 const { project, index = 0 } = Astro.props;
-const { title, summary, techStack, pubDate } = project.data;
+const { title, summary, techStack, pubDate, category } = project.data;
 const year = pubDate.getFullYear();
 const href = `/projects/${project.id}`;
+const number = String(index + 1).padStart(2, "0");
+const state = 3.1 + index * 0.73;
 ---
 
-<a
-	href={href}
-	class="reveal-item group flex flex-col items-start gap-3 border-b border-border py-6 last:border-0 lg:flex-row lg:items-center lg:gap-8 lg:py-8"
-	style={`--reveal-i: ${index}`}
+<article
+	class="group border-t border-border/70 py-8 md:py-11"
+	data-art-react
+	data-art-state={state}
+	data-art-energy="0.92"
+	data-reveal
 >
-	<span class="font-share text-xs tracking-wider text-muted lg:w-20 lg:shrink-0 lg:text-sm"
-		>{year}</span
-	>
-	<div class="min-w-0 flex-1">
-		<h3
-			class="mb-2 text-3xl leading-none font-bold tracking-tight transition-transform group-hover:translate-x-1 lg:text-4xl"
-		>
-			{title}
-		</h3>
-		<ul
-			class="flex flex-wrap items-center gap-x-2 font-share text-xs tracking-widest text-muted uppercase"
-		>
-			{
-				techStack.map((item, i) => (
-					<>
-						{i > 0 && <span aria-hidden="true">·</span>}
-						<li>{item}</li>
-					</>
-				))
-			}
-		</ul>
-	</div>
-	<p class="text-sm leading-relaxed text-muted lg:w-80 lg:shrink-0 lg:text-base">{summary}</p>
-	<ArrowSvg
-		class="hidden h-8 w-12 shrink-0 fill-current transition-transform group-hover:translate-x-1 lg:block"
-	/>
-</a>
+	<a href={href} class="grid gap-7 no-underline md:grid-cols-[5.5rem_minmax(0,1fr)] lg:grid-cols-12 lg:gap-8">
+		<div class="flex items-start justify-between md:block lg:col-span-1">
+			<span class="micro-label">{number}</span>
+			<span class="micro-label md:mt-6 md:block">{year}</span>
+		</div>
+
+		<div class="md:col-start-2 lg:col-span-7 lg:col-start-3">
+			<p class="micro-label mb-4">{category}</p>
+			<h3
+				class="display-type text-[clamp(3.4rem,10vw,9.5rem)] transition-transform duration-500 ease-out group-hover:translate-x-[0.025em]"
+			>
+				{title}
+			</h3>
+		</div>
+
+		<div class="md:col-start-2 lg:col-span-3 lg:col-start-10 lg:self-end">
+			<p class="editorial-copy max-w-md text-sm text-muted md:text-base">{summary}</p>
+			<p class="micro-label mt-5 leading-relaxed">{techStack.join(" / ")}</p>
+			<span class="micro-label mt-7 inline-block text-content">open project ↗</span>
+		</div>
+	</a>
+</article>
