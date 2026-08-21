@@ -1,0 +1,178 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Project from "./Project.astro";
+import { contacts } from "../data/contacts";
+import { skillGroups } from "../data/skills";
+
+interface Props {
+	topProjects: CollectionEntry<"projects">[];
+	concept: string;
+}
+
+const { topProjects, concept } = Astro.props;
+const bigContacts = contacts.filter((contact) => contact.big);
+const smallContacts = contacts.filter((contact) => !contact.big);
+
+const ideas = [
+	["alive", "Alive"],
+	["living-paper", "Living Paper"],
+	["ink-glass", "Ink Glass"],
+	["specimen", "Specimen"],
+	["quiet-space", "Quiet Space"],
+] as const;
+---
+
+<div class="relative z-10">
+	<nav
+		aria-label="Atmosphere concepts"
+		class="fixed right-4 bottom-4 z-40 flex max-w-[calc(100vw-2rem)] flex-wrap justify-end gap-x-3 gap-y-1 border border-border bg-bg/80 px-3 py-2 font-share text-[10px] tracking-widest text-muted uppercase backdrop-blur-md md:right-6 md:bottom-6"
+	>
+		<a href="/" class="transition-colors hover:text-content">Index</a>
+		<span aria-hidden="true">/</span>
+		{
+			ideas.map(([slug, label]) => (
+				<a
+					href={`/idea/${slug}`}
+					aria-current={concept === slug ? "page" : undefined}
+					class:list={[
+						"transition-colors hover:text-content",
+						concept === slug && "text-content underline underline-offset-4",
+					]}
+				>
+					{label}
+				</a>
+			))
+		}
+	</nav>
+
+	<section class="flex min-h-screen w-full flex-col justify-center border-border py-28 md:py-32 lg:py-36">
+		<div class="mb-auto flex items-start justify-between gap-6 pt-4 font-share text-[10px] tracking-[0.2em] text-muted uppercase md:text-xs">
+			<span>Atmosphere study / {concept}</span>
+			<span class="text-right">Software Developer / Student</span>
+		</div>
+
+		<div class="my-auto py-20 md:py-28">
+			<h1 class="font-ndot47 text-[clamp(6rem,20vw,18rem)] leading-[0.72] tracking-[-0.06em]">
+				eitaar
+			</h1>
+		</div>
+
+		<p class="max-w-lg font-share text-sm leading-relaxed text-muted md:text-base">
+			A personal space for software, experiments, and things I am still figuring out.
+		</p>
+	</section>
+
+	<section class="reveal flex w-full flex-col items-start gap-8 border-t border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36">
+		<h2 class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl" style="--reveal-i: 0">
+			About
+		</h2>
+		<div class="reveal-item grid gap-8 lg:grid-cols-12 lg:gap-11" style="--reveal-i: 1">
+			<div class="flex flex-col gap-4 lg:col-span-9">
+				<p class="text-base text-pretty md:text-lg lg:text-xl">
+					I'm a student in the UK. I play with little projects that link separate things, mostly to find out whether they hold up once they're running. A lot of it is just me following a thought and seeing where it lands.
+				</p>
+				<p class="text-base text-pretty md:text-lg lg:text-xl">
+					Off the keyboard, I tend to disappear into books and comics, or just listen to music.
+				</p>
+			</div>
+			<div class="hidden lg:col-span-3 lg:flex lg:items-end lg:justify-end">
+				<p class="font-share text-[10px] leading-relaxed tracking-[0.2em] text-muted uppercase">
+					Observe<br />Build<br />Break<br />Repeat
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="reveal flex w-full flex-col items-start gap-8 border-t border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36">
+		<h2 class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl" style="--reveal-i: 0">
+			Skills
+		</h2>
+		<ul class="grid w-full grid-cols-2 gap-y-8 lg:grid-cols-4 lg:gap-y-0">
+			{
+				skillGroups.map((group, index) => (
+					<li
+						class:list={[
+							"reveal-item flex flex-col gap-6 px-0 lg:px-8 lg:first:pl-0 lg:last:pr-0",
+							index !== 0 && "lg:border-l lg:border-border",
+						]}
+						style={`--reveal-i: ${index + 1}`}
+					>
+						<span class="font-share text-sm tracking-wider text-muted uppercase">{group.category}</span>
+						<ul class="flex flex-col gap-3 font-ndot47 text-2xl leading-none tracking-wide md:text-3xl lg:gap-4">
+							{group.items.map((item) => <li>{item}</li>)}
+						</ul>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section class="reveal flex w-full flex-col items-start gap-8 border-t border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36">
+		<div class="flex w-full items-end justify-between gap-6">
+			<h2 class="reveal-item font-ndot47 text-4xl leading-none tracking-wide md:text-5xl lg:text-6xl" style="--reveal-i: 0">
+				Top Projects
+			</h2>
+			<a href="/projects" class="reveal-item mb-1 font-share text-xs tracking-widest text-muted uppercase underline underline-offset-4 hover:text-content" style="--reveal-i: 1">
+				Archive ↗
+			</a>
+		</div>
+		<div class="flex w-full flex-col">
+			{topProjects.map((project, index) => <Project project={project} index={index + 1} />)}
+		</div>
+	</section>
+
+	<section class="reveal flex w-full flex-col items-start gap-8 border-t border-border py-20 md:gap-12 md:py-28 lg:gap-16 lg:py-36">
+		{
+			bigContacts.map((contact, index) => (
+				<a
+					href={contact.link}
+					class="reveal-item group flex w-full items-center justify-between pb-4 lg:pb-8"
+					style={`--reveal-i: ${index}`}
+				>
+					<span class="font-ndot47 text-4xl leading-none tracking-wide transition-transform group-hover:translate-x-1 md:text-5xl lg:text-7xl">
+						{contact.name}
+					</span>
+					<span aria-hidden="true" class="font-share text-2xl transition-transform group-hover:translate-x-1">→</span>
+				</a>
+			))
+		}
+
+		<ul class="grid w-full grid-cols-1 gap-y-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-0">
+			{
+				smallContacts.map((contact, index) => (
+					<li
+						class:list={[
+							"reveal-item flex flex-col gap-3 border-0 px-0 sm:border-l sm:border-border sm:px-8 sm:last:pr-0 sm:odd:border-l-0 sm:odd:pl-0 lg:first:border-l-0 lg:first:pl-0 lg:odd:border-l lg:odd:pl-8",
+						]}
+						style={`--reveal-i: ${bigContacts.length + index}`}
+					>
+						<span class="font-share text-sm tracking-wider text-muted uppercase">{contact.label}</span>
+						<a href={contact.link} class="font-ndot47 text-3xl leading-none tracking-wide">{contact.name}</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</div>
+
+<script>
+	const revealSections = document.querySelectorAll<HTMLElement>(".reveal");
+	const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+	if (reduceMotion || !("IntersectionObserver" in window)) {
+		for (const section of revealSections) section.classList.add("in-view");
+	} else {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) {
+						entry.target.classList.add("in-view");
+						observer.unobserve(entry.target);
+					}
+				}
+			},
+			{ rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
+		);
+		for (const section of revealSections) observer.observe(section);
+	}
+</script>
