@@ -7,9 +7,20 @@ const rawProjects = await getCollection("projects");
 const projects = rawProjects.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<Layout title="projects" description="list of my project">
-	<h3 class="pt-32 pb-8 font-ndot47 text-6xl leading-none tracking-wide">Projects</h3>
-	<div class="flex w-full flex-col">
-		{projects.map((project) => <Project project={project} />)}
-	</div>
+<Layout title="projects / eitaar" description="An archive of projects, experiments, and things that made it far enough to name.">
+	<section class="art-section px-5 pt-36 pb-20 md:px-8 md:pt-44 lg:px-12 lg:pt-52" data-art-state="3.2">
+		<div class="grid gap-8 lg:grid-cols-12 lg:items-start">
+			<p class="micro-label lg:col-span-2" data-reveal>archive / {projects.length} entries</p>
+			<h1 class="display-type text-[clamp(7rem,19vw,20rem)] lg:col-span-8 lg:col-start-3" data-reveal>
+				Projects
+			</h1>
+			<p class="editorial-copy max-w-sm text-sm text-muted md:text-base lg:col-span-3 lg:col-start-9" data-reveal>
+				Experiments, tools, software, and ideas that became concrete enough to keep around.
+			</p>
+		</div>
+	</section>
+
+	<section class="relative px-5 pb-28 md:px-8 md:pb-36 lg:px-12 lg:pb-44" data-art-state="3.9">
+		{projects.map((project, index) => <Project project={project} index={index} />)}
+	</section>
 </Layout>

@@ -1,0 +1,377 @@
+<canvas id="living-ink" aria-hidden="true"></canvas>
+
+<script>
+	const canvas = document.querySelector<HTMLCanvasElement>("#living-ink");
+
+	if (canvas) {
+		const gl = canvas.getContext("webgl2", {
+			alpha: true,
+			antialias: false,
+			depth: false,
+			powerPreference: "high-performance",
+		});
+
+		if (!gl) {
+			canvas.hidden = true;
+		} else {
+			const vertexSource = `#version 300 es
+				precision highp float;
+
+				in vec2 aPosition;
+				uniform float uTime;
+				uniform float uState;
+				uniform float uEnergy;
+				uniform vec2 uPointer;
+				uniform vec2 uResolution;
+
+				out vec2 vUv;
+				out float vHeight;
+				out float vInkSeed;
+
+				float hash(vec2 p) {
+					return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+				}
+
+				float noise(vec2 p) {
+					vec2 i = floor(p);
+					vec2 f = fract(p);
+					vec2 u = f * f * (3.0 - 2.0 * f);
+					return mix(
+						mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
+						mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
+						u.y
+					);
+				}
+
+				float fbm(vec2 p) {
+					float value = 0.0;
+					float amplitude = 0.5;
+					mat2 rotation = mat2(0.80, -0.60, 0.60, 0.80);
+					for (int i = 0; i < 5; i++) {
+						value += amplitude * noise(p);
+						p = rotation * p * 2.03 + 0.17;
+						amplitude *= 0.5;
+					}
+					return value;
+				}
+
+				void main() {
+					float aspect = uResolution.x / max(uResolution.y, 1.0);
+					vec2 uv = aPosition * 0.5 + 0.5;
+					vec2 p = aPosition;
+					p.x *= mix(0.9, 1.45, smoothstep(0.8, 1.8, aspect));
+
+					float drift = uTime * 0.055;
+					float broad = fbm(vec2(p.x * 0.72 + drift, p.y * 0.86 - drift * 0.61));
+					float detail = fbm(vec2(p.x * 1.76 - drift * 0.4, p.y * 1.62 + drift * 0.72) + uState * 0.12);
+					float folds = 1.0 - abs(2.0 * detail - 1.0);
+
+					vec2 pointerDelta = uv - uPointer;
+					float pointerPressure = exp(-dot(pointerDelta, pointerDelta) * 18.0) * uEnergy;
+					float sectionTension = sin(uState * 0.81 + p.y * 1.9) * 0.065;
+					float height = (broad - 0.5) * 0.44 + (folds - 0.5) * 0.16 + sectionTension;
+					height -= pointerPressure * 0.14;
+
+					vec2 displaced = aPosition;
+					displaced.x += (broad - 0.5) * 0.105 + sin(p.y * 1.55 + uState * 0.55) * 0.026;
+					displaced.y += height * 0.19 + cos(p.x * 1.3 - uState * 0.34) * 0.018;
+
+					float breathing = 0.965 + 0.028 * sin(uTime * 0.22 + uState * 0.31);
+					displaced *= breathing;
+					displaced.x += sin(uState * 0.63) * 0.045;
+					displaced.y += cos(uState * 0.41) * 0.035;
+
+					gl_Position = vec4(displaced, 0.0, 1.0);
+					vUv = uv;
+					vHeight = height;
+					vInkSeed = detail * 0.65 + broad * 0.35 + pointerPressure * 0.28;
+				}
+			`;
+
+			const fragmentSource = `#version 300 es
+				precision highp float;
+
+				in vec2 vUv;
+				in float vHeight;
+				in float vInkSeed;
+
+				uniform float uTime;
+				uniform float uState;
+				uniform float uEnergy;
+				uniform vec3 uSurface;
+				uniform vec3 uInk;
+				uniform vec3 uText;
+
+				out vec4 outColor;
+
+				float hash(vec2 p) {
+					return fract(sin(dot(p, vec2(41.3, 289.1))) * 45758.5453);
+				}
+
+				float noise(vec2 p) {
+					vec2 i = floor(p);
+					vec2 f = fract(p);
+					vec2 u = f * f * (3.0 - 2.0 * f);
+					return mix(
+						mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
+						mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
+						u.y
+					);
+				}
+
+				float fbm(vec2 p) {
+					float value = 0.0;
+					float amplitude = 0.5;
+					for (int i = 0; i < 4; i++) {
+						value += noise(p) * amplitude;
+						p = p * 2.08 + vec2(3.1, -1.7);
+						amplitude *= 0.5;
+					}
+					return value;
+				}
+
+				void main() {
+					vec2 inkUv = vUv * vec2(2.45, 2.9);
+					inkUv += vec2(uState * 0.075, -uTime * 0.008);
+					float stainNoise = fbm(inkUv + fbm(inkUv * 1.7 + 4.2));
+					float sectionBias = 0.08 * sin(uState * 1.37) + 0.035 * uEnergy;
+					float stain = smoothstep(0.54 - sectionBias, 0.72 - sectionBias, stainNoise * 0.78 + vInkSeed * 0.35);
+
+					float edgeBleed = fbm(vUv * 9.0 + uState * 0.17);
+					stain *= smoothstep(0.24, 0.72, edgeBleed + stain * 0.58);
+
+					float light = clamp(0.52 + vHeight * 1.15, 0.0, 1.0);
+					vec3 surface = mix(uSurface * 0.92, mix(uSurface, uText, 0.11), light);
+					vec3 color = mix(surface, uInk, stain * 0.86);
+
+					float vignette = smoothstep(1.18, 0.18, distance(vUv, vec2(0.52, 0.49)));
+					float alpha = 0.48 + vignette * 0.30;
+					outColor = vec4(color, alpha);
+				}
+			`;
+
+			function compileShader(type: number, source: string) {
+				const shader = gl.createShader(type);
+				if (!shader) return null;
+				gl.shaderSource(shader, source);
+				gl.compileShader(shader);
+				if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+					console.error(gl.getShaderInfoLog(shader));
+					gl.deleteShader(shader);
+					return null;
+				}
+				return shader;
+			}
+
+			const vertexShader = compileShader(gl.VERTEX_SHADER, vertexSource);
+			const fragmentShader = compileShader(gl.FRAGMENT_SHADER, fragmentSource);
+			const program = gl.createProgram();
+
+			if (!vertexShader || !fragmentShader || !program) {
+				canvas.hidden = true;
+			} else {
+				gl.attachShader(program, vertexShader);
+				gl.attachShader(program, fragmentShader);
+				gl.linkProgram(program);
+
+				if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+					console.error(gl.getProgramInfoLog(program));
+					canvas.hidden = true;
+				} else {
+					gl.useProgram(program);
+					gl.enable(gl.BLEND);
+					gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+					const positionLocation = gl.getAttribLocation(program, "aPosition");
+					const uniforms = {
+						time: gl.getUniformLocation(program, "uTime"),
+						state: gl.getUniformLocation(program, "uState"),
+						energy: gl.getUniformLocation(program, "uEnergy"),
+						pointer: gl.getUniformLocation(program, "uPointer"),
+						resolution: gl.getUniformLocation(program, "uResolution"),
+						surface: gl.getUniformLocation(program, "uSurface"),
+						ink: gl.getUniformLocation(program, "uInk"),
+						text: gl.getUniformLocation(program, "uText"),
+					};
+
+					const buffer = gl.createBuffer();
+					gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+
+					let vertexCount = 0;
+					function rebuildMesh() {
+						const compact = window.innerWidth < 720;
+						const segmentsX = compact ? 42 : 72;
+						const segmentsY = compact ? 54 : 82;
+						const vertices: number[] = [];
+
+						for (let y = 0; y < segmentsY; y++) {
+							for (let x = 0; x < segmentsX; x++) {
+								const x0 = (x / segmentsX) * 2.35 - 1.175;
+								const x1 = ((x + 1) / segmentsX) * 2.35 - 1.175;
+								const y0 = (y / segmentsY) * 2.35 - 1.175;
+								const y1 = ((y + 1) / segmentsY) * 2.35 - 1.175;
+								vertices.push(x0, y0, x1, y0, x0, y1, x0, y1, x1, y0, x1, y1);
+							}
+						}
+
+						vertexCount = vertices.length / 2;
+						gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+						gl.enableVertexAttribArray(positionLocation);
+						gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+					}
+
+					function parseCssColor(value: string) {
+						const normalized = value.trim();
+						if (/^#[0-9a-f]{6}$/i.test(normalized)) {
+							return [
+								parseInt(normalized.slice(1, 3), 16) / 255,
+								parseInt(normalized.slice(3, 5), 16) / 255,
+								parseInt(normalized.slice(5, 7), 16) / 255,
+							] as const;
+						}
+						return [0.5, 0.5, 0.5] as const;
+					}
+
+					function syncTheme() {
+						const styles = getComputedStyle(document.documentElement);
+						const surface = parseCssColor(styles.getPropertyValue("--surface"));
+						const ink = parseCssColor(styles.getPropertyValue("--ink"));
+						const text = parseCssColor(styles.getPropertyValue("--content"));
+						gl.uniform3fv(uniforms.surface, surface);
+						gl.uniform3fv(uniforms.ink, ink);
+						gl.uniform3fv(uniforms.text, text);
+					}
+
+					const maxDpr = window.innerWidth < 720 ? 1.15 : 1.5;
+					function resize() {
+						const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+						const width = Math.max(1, Math.floor(window.innerWidth * dpr));
+						const height = Math.max(1, Math.floor(window.innerHeight * dpr));
+						if (canvas.width !== width || canvas.height !== height) {
+							canvas.width = width;
+							canvas.height = height;
+							gl.viewport(0, 0, width, height);
+							gl.uniform2f(uniforms.resolution, width, height);
+							rebuildMesh();
+						}
+					}
+
+					const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+					const finePointer = window.matchMedia("(pointer: fine)").matches;
+					let pointerX = 0.5;
+					let pointerY = 0.5;
+					let targetEnergy = 0;
+					let energy = 0;
+					let targetState = 0;
+					let state = 0;
+					let hoverState: number | null = null;
+					let lastTime = 0;
+
+					function updateStateFromScroll() {
+						const candidates = [...document.querySelectorAll<HTMLElement>("[data-art-state]")];
+						if (!candidates.length) return;
+						const center = window.innerHeight * 0.5;
+						let closest = candidates[0];
+						let closestDistance = Number.POSITIVE_INFINITY;
+
+						for (const candidate of candidates) {
+							const rect = candidate.getBoundingClientRect();
+							const candidateCenter = rect.top + rect.height * 0.5;
+							const distance = Math.abs(candidateCenter - center);
+							if (distance < closestDistance) {
+								closest = candidate;
+								closestDistance = distance;
+							}
+						}
+
+						targetState = Number(closest.dataset.artState ?? 0);
+						if (reducedMotion.matches) render(performance.now());
+					}
+
+					function bindInteractiveText() {
+						for (const element of document.querySelectorAll<HTMLElement>("[data-art-react]")) {
+							const enter = () => {
+								targetEnergy = Number(element.dataset.artEnergy ?? 0.8);
+								hoverState = Number(element.dataset.artState ?? targetState);
+							};
+							const leave = () => {
+								targetEnergy = 0;
+								hoverState = null;
+							};
+							element.addEventListener("pointerenter", enter);
+							element.addEventListener("pointerleave", leave);
+							element.addEventListener("focusin", enter);
+							element.addEventListener("focusout", leave);
+						}
+					}
+
+					if (finePointer) {
+						window.addEventListener(
+							"pointermove",
+							(event) => {
+								pointerX = event.clientX / window.innerWidth;
+								pointerY = 1 - event.clientY / window.innerHeight;
+								targetEnergy = Math.max(targetEnergy, 0.14);
+							},
+							{ passive: true },
+						);
+					}
+
+					function render(now: number) {
+						const time = reducedMotion.matches ? 3.8 : now * 0.001;
+						const desiredState = hoverState ?? targetState;
+						const stateEase = reducedMotion.matches ? 1 : 0.045;
+						state += (desiredState - state) * stateEase;
+						energy += (targetEnergy - energy) * 0.055;
+						if (targetEnergy <= 0.14) targetEnergy *= 0.985;
+
+						gl.uniform1f(uniforms.time, time);
+						gl.uniform1f(uniforms.state, state);
+						gl.uniform1f(uniforms.energy, reducedMotion.matches ? 0 : energy);
+						gl.uniform2f(uniforms.pointer, pointerX, pointerY);
+						gl.clearColor(0, 0, 0, 0);
+						gl.clear(gl.COLOR_BUFFER_BIT);
+						gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
+						lastTime = now;
+					}
+
+					function loop(now: number) {
+						if (!document.hidden) render(now);
+						if (!reducedMotion.matches) requestAnimationFrame(loop);
+					}
+
+					const themeObserver = new MutationObserver(() => {
+						syncTheme();
+						if (reducedMotion.matches) render(lastTime || performance.now());
+					});
+					themeObserver.observe(document.documentElement, {
+						attributes: true,
+						attributeFilter: ["data-theme"],
+					});
+
+					window.addEventListener("resize", resize, { passive: true });
+					window.addEventListener("scroll", updateStateFromScroll, { passive: true });
+					reducedMotion.addEventListener("change", () => window.location.reload());
+
+					resize();
+					syncTheme();
+					bindInteractiveText();
+					updateStateFromScroll();
+					render(performance.now());
+					if (!reducedMotion.matches) requestAnimationFrame(loop);
+				}
+			}
+		}
+	}
+</script>
+
+<style>
+	#living-ink {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+</style>

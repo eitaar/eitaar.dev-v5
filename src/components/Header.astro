@@ -1,31 +1,36 @@
 ---
-const NAV_LINKS = [
-	{ text: "Projects", url: "/projects" },
-	// { text: "Contact", url: "#contact" },
-];
-
 import { Icon } from "astro-icon/components";
+
+const NAV_LINKS = [
+	{ text: "Index", url: "/" },
+	{ text: "Projects", url: "/projects" },
+];
 ---
 
 <header
-	class="fixed top-0 right-0 left-0 z-50 flex h-20 items-center justify-end px-6 py-4 lg:justify-between"
+	class="fixed top-0 right-0 left-0 z-40 grid grid-cols-[1fr_auto] items-start gap-6 px-5 pt-5 md:px-8 md:pt-7 lg:grid-cols-3 lg:px-12"
 >
-	<a class="hidden font-ndot47 text-lg lg:block" href="/">eitaar</a>
-	<nav>
-		<ul class="flex gap-3 font-share text-lg text-muted sm:gap-4">
+	<a href="/" class="micro-label text-link w-fit">eitaar / archive</a>
+
+	<nav aria-label="Primary" class="justify-self-end lg:col-start-3">
+		<ul class="flex items-center gap-5 md:gap-7">
 			{
 				NAV_LINKS.map((link) => (
 					<li>
-						<a href={link.url} class="hidden lg:block">
+						<a href={link.url} class="micro-label text-link">
 							{link.text}
 						</a>
 					</li>
 				))
 			}
 			<li>
-				<button id="theme-toggle" class="" aria-label="toggle dark mode">
-					<Icon name="bi:moon-stars-fill" class="hidden h-5 w-5 dark:block" />
-					<Icon name="bi:sun-fill" class="h-5 w-5 dark:hidden" />
+				<button
+					id="theme-toggle"
+					type="button"
+					class="flex h-7 w-7 items-center justify-center"
+					aria-label="Toggle colour theme"
+				>
+					<Icon name="bi:circle-half" class="h-3.5 w-3.5" />
 				</button>
 			</li>
 		</ul>

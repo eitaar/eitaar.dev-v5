@@ -1,41 +1,39 @@
 ---
-import { Image } from "astro:assets";
-import NotFoundImage from "../assets/img/404.png";
 import Layout from "../layouts/Layout.astro";
-import "../styles/global.css";
 ---
 
 <Layout
-	title="404 Not Found"
+	title="404 — eitaar"
 	description="The page you are looking for does not exist."
-	showHeader={false}
 	showFooter={false}
 >
-	<div class="flex min-h-screen w-full flex-col items-center justify-center gap-6 p-8">
-		<Image
-			src={NotFoundImage}
-			alt="404 Not Found"
-			width={600}
-			loading="eager"
-			fetchpriority="high"
-			format="avif"
-		/>
-		<p class="text-center text-lg text-pretty text-muted">
-			The page you are looking for does not seem to exist.
-		</p>
-		<a href="/" class="text-center text-lg text-pretty text-muted underline hover:text-content">
-			Go back to the Top page
-		</a>
-	</div>
-	<p class="absolute! right-4 bottom-4 z-30 text-xs text-muted md:text-sm">
-		KawaiiLogos by
-		<a
-			href="https://github.com/SAWARATSUKI/KawaiiLogos"
-			target="_blank"
-			rel="noopener noreferrer"
-			class="underline hover:text-content"
-		>
-			SAWARATSUKI
-		</a>
-	</p>
+	<section
+		class="art-section flex min-h-screen flex-col justify-between px-6 pt-32 pb-8 md:px-12 lg:px-20"
+		data-art-state="7.2"
+	>
+		<div class="flex items-start justify-between gap-8">
+			<p class="micro-label">Error / 404</p>
+			<p class="micro-label text-right">Nothing here<br />except the surface.</p>
+		</div>
+
+		<div class="py-20">
+			<p class="display-type text-[clamp(8rem,30vw,28rem)]">404</p>
+			<p class="editorial-copy mt-8 max-w-md text-base text-muted md:ml-[42vw] md:text-lg">
+				The page you were looking for has slipped out of the archive.
+			</p>
+		</div>
+
+		<div class="flex items-end justify-between gap-6 border-t border-border pt-5">
+			<a
+				href="/"
+				class="text-link font-display text-3xl leading-none italic md:text-5xl"
+				data-art-react
+				data-art-state="0"
+				data-art-energy="0.8"
+			>
+				return home
+			</a>
+			<span class="micro-label">eitaar.dev</span>
+		</div>
+	</section>
 </Layout>
