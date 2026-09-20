@@ -20,9 +20,9 @@ const smallContacts = contacts.filter((c) => !c.big);
 
 <Layout title="eitaar" description="eitaar's portfolio">
 	<div
-		class="flex min-h-screen w-full flex-col-reverse items-center justify-center gap-4 border-border text-center lg:flex-row lg:items-center lg:justify-between lg:gap-0 lg:text-left"
+		class="flex min-h-screen w-full flex-col-reverse items-center justify-center gap-4 border-border text-center lg:flex-row-reverse lg:items-center lg:justify-between lg:gap-0 lg:text-left lg:px-40"
 	>
-		<div class="flex flex-col items-center justify-center gap-5 lg:items-start lg:pt-12">
+		<div class="flex flex-col items-center justify-center gap-5 lg:items-start">
 			<h1 class="font-ndot47 text-7xl leading-none tracking-tight md:text-8xl lg:text-9xl">
 				eitaar
 			</h1>
@@ -31,7 +31,7 @@ const smallContacts = contacts.filter((c) => !c.big);
 			</p>
 		</div>
 		<Picture
-			class="h-48 w-48 transition-opacity duration-300 md:h-64 md:w-64 lg:h-96 lg:w-96 dark:opacity-75"
+			class="h-48 w-48 transition-opacity duration-300 md:h-64 md:w-64 lg:h-96 lg:w-96 dark:opacity-75 rounded-full" 
 			src={avatarImg}
 			alt="avatar image"
 			fetchpriority="high"
